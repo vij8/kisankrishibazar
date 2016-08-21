@@ -21,7 +21,6 @@ import spark.Request;
 import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
 
-import com.kisankrishibazar.dao.FarmerDAO;
 import com.kisankrishibazar.dao.LoginDAO;
 import com.kisankrishibazar.dao.RetailerDAO;
 import com.kisankrishibazar.model.CommodityListBean;
@@ -38,7 +37,7 @@ public class WebConfig {
 
 	private LoginDAO dao;
 	private RetailerDAO retailerDao;
-	private FarmerDAO farmerDao;
+
 
 	public WebConfig(KisankrishiServices service, Map<String, Object> map) {
 		this.kisanKrishiServices = service;
@@ -66,10 +65,6 @@ public class WebConfig {
 			Map<String, Object> map = new HashMap<>();
 			return new ModelAndView(map, "/dashboard.ftl");
 		}, new FreeMarkerEngine());
-
-		get("/retailer/getCommodity", (req, res) -> {
-			return retailerDao.getCommodityList();
-		}, new JsonTransformer());
 
 		post("/retailer/login", (req, res) -> {
 
