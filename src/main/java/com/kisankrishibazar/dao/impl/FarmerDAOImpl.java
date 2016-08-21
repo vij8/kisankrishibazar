@@ -30,7 +30,7 @@ public class FarmerDAOImpl implements FarmerDAO {
 	public List<CommodityListBean> getCommodityList(String languageReq) {
 		List<CommodityListBean> returnCommodityListBean = new ArrayList<CommodityListBean>();
 
-		String commodityQuery = "Select '"+ languageReq +"' ,Quantity,Price From translation tr, Commodity cd,MCX mc where cd.English=tr.English AND cd.id=mc.id";
+		String commodityQuery = "Select tr.'"+ languageReq +"' , cd.Quantity, mc.Price From translation tr, Commodity cd,MCX mc where cd.English=tr.English AND cd.id=mc.id";
 		return jdbcTemplate.query(commodityQuery,new BeanPropertyRowMapper(CommodityListBean.class));
 	}
 	
