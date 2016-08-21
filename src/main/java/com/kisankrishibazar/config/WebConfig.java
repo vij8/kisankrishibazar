@@ -70,6 +70,19 @@ public class WebConfig
 			Map<String, Object> map = new HashMap<>();
 			return new ModelAndView(map, "/register.ftl");
 		}, new FreeMarkerEngine());
+		
+		get("/retailer/orderhistory", (req, res) -> {
+			Map<String, Object> map = new HashMap<>();
+			return new ModelAndView(map, "/orderhistory.ftl");
+		}, new FreeMarkerEngine());
+		before("/retailer/orderhistory", (req, res) -> {
+			User user = getAuthenticatedUser(req);
+			if (user == null) {
+				res.redirect("/retailer/home");
+				halt();
+			}
+		});
+		
 
 		get("/retailer/dashboard", (req, res) -> {
 			Map<String, Object> map = new HashMap<>();
@@ -152,7 +165,7 @@ public class WebConfig
 			OrderHistory orderHistory = new OrderHistory();
 			try {
 				MultiMap<String> params = new MultiMap<String>();
-				UrlEncoded.decodeTo(req.body(), params, "UTF-8");
+				UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
 				BeanUtils.populate(orderHistory, params);
 			}
 			catch (Exception e) {

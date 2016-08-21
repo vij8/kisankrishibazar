@@ -52,7 +52,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 
 	public OrderHistory getOrderHistory(String username) {
 
-		String sql = "SELECT * FROM OrderSuccesfulHistory where userName = ?";
+		String sql = "SELECT * FROM OrderSuccesfulHistory where retailerusername = ?";
 		return jdbcTemplate.queryForObject(sql, new Object[] { username },
 				new OrderHistoryMapper());
 	}
