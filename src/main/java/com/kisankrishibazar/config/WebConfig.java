@@ -17,6 +17,7 @@ import spark.Request;
 import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
 
+import com.kisankrishibazar.dao.FarmerDAO;
 import com.kisankrishibazar.dao.LoginDAO;
 import com.kisankrishibazar.dao.RetailerDAO;
 import com.kisankrishibazar.model.JsonTransformer;
@@ -33,6 +34,7 @@ public class WebConfig
 
 	private LoginDAO dao;
 	private RetailerDAO retailerDao;
+	private FarmerDAO farmerDao;
 
 	public WebConfig(KisankrishiServices service, Map<String, Object> map)
 	{
@@ -48,6 +50,12 @@ public class WebConfig
 	{
 
 		get("/farmer", (req, res) -> "hi I am farmer");
+		
+		get("/farmer/getCommodity", (req, res) -> {
+
+			String languageReq = req.queryParams("languageReq");
+			return farmerDao.getCommodityList(languageReq);
+		}, new JsonTransformer());
 
 	}
 
