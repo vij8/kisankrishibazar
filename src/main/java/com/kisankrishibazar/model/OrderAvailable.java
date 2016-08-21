@@ -7,9 +7,9 @@ public class OrderAvailable {
 
 	private int qty;
 
-	private float lat;
+	private Double lat;
 	
-	private float longt;
+	private Double longt;
 
 	public String getItem() {
 		return item;
@@ -27,19 +27,19 @@ public class OrderAvailable {
 		this.qty = qty;
 	}
 
-	public float getLat() {
+	public Double getLat() {
 		return lat;
 	}
 
-	public void setLat(float lat) {
+	public void setLat(Double lat) {
 		this.lat = lat;
 	}
 
-	public float getLongt() {
+	public Double getLongt() {
 		return longt;
 	}
 
-	public void setLongt(float longt) {
+	public void setLongt(Double longt) {
 		this.longt = longt;
 	}
 

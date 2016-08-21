@@ -6,12 +6,13 @@ import com.kisankrishibazar.model.CommodityListBean;
 import com.kisankrishibazar.model.OrderAvailable;
 import com.kisankrishibazar.model.OrderHistory;
 import com.kisankrishibazar.model.User;
+import com.kisankrishibazar.model.UserDetailWithItem;
 
 public interface RetailerDAO 
 {
     public Boolean registerNewUser(User user);
     
-    public OrderAvailable getOrderAvailable(OrderAvailable orderAvailable);
+    public List<UserDetailWithItem> getOrderAvailable(String item , int quantity , Double lat, Double longitude);
     
     public OrderHistory getOrderHistory(String username);
     

@@ -154,7 +154,7 @@ public class WebConfig
 				halt(501);
 				return null;
 			}
-			return retailerDao.getOrderAvailable(orderAvailable);
+			return retailerDao.getOrderAvailable(orderAvailable.getItem(),orderAvailable.getQty(),orderAvailable.getLat(),orderAvailable.getLongt());
 		}, new JsonTransformer());
 
 		get("/retailer/getCommodity", (req, res) -> {
