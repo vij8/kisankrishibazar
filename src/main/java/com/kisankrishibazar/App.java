@@ -9,6 +9,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 import com.kisankrishibazar.config.WebConfig;
+import com.kisankrishibazar.dao.FarmerDAO;
 import com.kisankrishibazar.dao.LoginDAO;
 import com.kisankrishibazar.dao.RetailerDAO;
 import com.kisankrishibazar.dao.impl.JdbcConfiguration;
@@ -27,6 +28,7 @@ public class App
 		ctx.scan(JdbcConfiguration.class.getPackage().getName());		
 		bean.put("loginDao", ctx.getBean(LoginDAO.class));
 		bean.put("retailerDao", ctx.getBean(RetailerDAO.class));
+		bean.put("farmerDao", ctx.getBean(FarmerDAO.class));
 		new WebConfig(ctx.getBean(KisankrishiServices.class), bean);
 		ctx.registerShutdownHook();
 		
