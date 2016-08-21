@@ -5,17 +5,23 @@ import static spark.Spark.get;
 import static spark.Spark.halt;
 import static spark.Spark.post;
 
+
 import java.util.HashMap;
 import java.util.Map;
+
+
+import javax.xml.ws.RespectBinding;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.eclipse.jetty.util.MultiMap;
 import org.eclipse.jetty.util.UrlEncoded;
 
+
 import spark.ModelAndView;
 import spark.Request;
 import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
+
 
 import com.kisankrishibazar.dao.LoginDAO;
 import com.kisankrishibazar.dao.RetailerDAO;
@@ -90,16 +96,15 @@ public class WebConfig
 			map.put("username", user.getUsername());
 			return dao.getUserDetail(user.getUsername(), user.getPassword());
 		}, new JsonTransformer());
-		/*
-		 * Checks if the user is already authenticated
-		 */
-		before("/retailer/login", (req, res) -> {
-			User authUser = getAuthenticatedUser(req);
-			if (authUser != null) {
-				res.redirect("/");
-				halt();
-			}
-		});
+//		/*
+//		 * Checks if the user is already authenticated
+//		 */
+//		before("/retailer/login", (req, res) -> {
+//			User authUser = getAuthenticatedUser(req);
+//			if (authUser != null) {
+//				
+//			}
+//		});
 		/*
 		 * Register new User
 		 */

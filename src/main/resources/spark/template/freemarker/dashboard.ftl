@@ -113,7 +113,7 @@
                             <form role="form">
                                 <div class="form-group">
                                     <label>Products</label>
-                                    <select class="form-control">
+                                    <select class="form-control products">
                                         <option>One Vale</option>
                                         <option>Two Vale</option>
                                         <option>Three Vale</option>
@@ -123,7 +123,7 @@
                                 <div class="alert alert-info">
                                     <strong>Todays Price</strong> Rupee
                                 </div>
-                                <div class="form-group">
+                                <div class="form-group quantity">
                                     <label>Quantity</label>
                                     <select class="form-control">
                                         <option>One Vale</option>
@@ -192,6 +192,7 @@
             <script src="assets/js/jquery-1.11.1.js"></script>
             <!-- BOOTSTRAP SCRIPTS  -->
             <script src="assets/js/bootstrap.js"></script>
+            <script src="assets/js/dashboard.js"></script>
 </body>
 
 </html>

@@ -1,5 +1,5 @@
 $(document).ready(function() {
-	$("#login").click(function() {
+	$("#search").click(function() {
 	       var id =  $("#username").val();
 	       var password = $("#password").val();
 	       $.ajax({

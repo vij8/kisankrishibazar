@@ -11,9 +11,10 @@ $(document).ready(function() {
 	        	   password : password
 	           },
 	           success: function( data, textStatus, jQxhr ){
-	              alert("test");
+	        	   window.location.href = '/retailer/dashboard';
 	           },
 	           error: function( jqXhr, textStatus, errorThrown ){
+	        	   alert("Please enter correct credentials.");
 	               console.log( errorThrown );
 	           }
 	       });

@@ -1,0 +1,19 @@
+# ignore all bin directories
+# matches "bin" in any subfolder
+bin/
+
+# ignore all target directories
+target/
+
+# ignore all files ending with ~
+*~
+*.classpath
+*.project
+*.prefs
+*.vlt
+
+.settings/
+*.DS_Store
+.DS_Store?
+
+.idea
