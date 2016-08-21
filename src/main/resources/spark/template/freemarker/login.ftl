@@ -78,7 +78,7 @@
                         <input id = "password" type="password" class="form-control" />
                         <hr />
                         <a id="login"  href="#" class="btn btn-info"><span class="glyphicon glyphicon-user"></span> &nbsp;Log Me In </a>&nbsp;
-                        <a id="signup" class="btn btn-info"><span class="glyphicon glyphicon-user"></span> &nbsp;Sign Up </a>&nbsp;
+                        <a id="signup" href="/retailer/register" class="btn btn-info"><span class="glyphicon glyphicon-user"></span> &nbsp;Sign Up </a>&nbsp;
                 </div>
  
                 </div>

@@ -19,7 +19,7 @@ $(document).ready(function() {
 	           contentType: 'application/x-www-form-urlencoded',
 	           data: $("#retailregister").serialize(),
 	           success: function( data, textStatus, jQxhr ){
-	              alert("test");
+	        	   window.location.href = '/retailer/home';
 	           },
 	           error: function( jqXhr, textStatus, errorThrown ){
 	               console.log( errorThrown );
