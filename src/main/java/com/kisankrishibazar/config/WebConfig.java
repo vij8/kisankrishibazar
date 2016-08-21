@@ -174,6 +174,20 @@ public class WebConfig
 			}
 			return retailerDao.getOrderHistory(orderHistory.getRetailerusername());
 		}, new JsonTransformer());
+		
+		get("/retailer/farmerdetail", (req, res) -> {
+			OrderHistory orderHistory = new OrderHistory();
+			try {
+				MultiMap<String> params = new MultiMap<String>();
+				UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
+				BeanUtils.populate(orderHistory, params);
+			}
+			catch (Exception e) {
+				halt(501);
+				return null;
+			}
+			return retailerDao.getFarmerDetails(orderHistory.getFrmrusername());
+		}, new JsonTransformer());
 
 	}
 

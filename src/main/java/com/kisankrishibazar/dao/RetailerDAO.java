@@ -16,6 +16,8 @@ public interface RetailerDAO
     
     public OrderHistory getOrderHistory(String username);
     
+    public User getFarmerDetails(String username);
+    
     public List<CommodityListBean> getCommodityList();
 	
 }

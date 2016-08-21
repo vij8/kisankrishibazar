@@ -29,51 +29,50 @@ import com.kisankrishibazar.model.UserDetailWithItem;
 import com.kisankrishibazar.model.UserWithItem;
 
 @Repository
-public class RetailerDAOImpl implements RetailerDAO {
+public class RetailerDAOImpl implements RetailerDAO
+{
 	@Inject
 	private JdbcTemplate jdbcTemplate;
 
-	public Boolean registerNewUser(User user) {
+	public Boolean registerNewUser(User user)
+	{
 		String query = "INSERT INTO Login (UserName, Name , Password , Type , Lat, Longt, Address, Phone) VALUES (?,?,?,?,?,?,?,?)";
-		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
-				Types.VARCHAR, Types.DOUBLE, Types.DOUBLE, Types.VARCHAR,
-				Types.VARCHAR };
-		int row = jdbcTemplate.update(
-				query,
-				new Object[] { user.getUsername(), user.getName(),
-						user.getPassword(), user.getType(), user.getLat(),
-						user.getLongt(), user.getAddress(), user.getPhone() },
-				types);
+		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DOUBLE,
+				Types.DOUBLE, Types.VARCHAR, Types.VARCHAR };
+		int row = jdbcTemplate.update(query, new Object[] { user.getUsername(), user.getName(), user.getPassword(),
+				user.getType(), user.getLat(), user.getLongt(), user.getAddress(), user.getPhone() }, types);
 		if (row > 0) {
 			return true;
-		} else {
+		}
+		else {
 			return false;
 		}
 	}
 
-	public List<UserDetailWithItem> getOrderAvailable(String item , int quantity , Double lat, Double longitude) {
+	public List<UserDetailWithItem> getOrderAvailable(String item, int quantity, Double lat, Double longitude)
+	{
 		String sql = "select  l.lat,l.longt,o.username from Commodity c, OrderAvailable o , login l where  c.id=o.id  and  l.username = o .userName  and c.English = ?";
 		List<UserWithItem> rows = jdbcTemplate.query(sql, new BeanPropertyRowMapper(UserWithItem.class));
-		Map<String,Double> distanceMapUser = new HashMap<String, Double>();
-		for(UserWithItem userinfo : rows){
-			haversine(userinfo.getUserName(),lat,userinfo.getLat(),longitude,userinfo.getLongt(),distanceMapUser);
+		Map<String, Double> distanceMapUser = new HashMap<String, Double>();
+		for (UserWithItem userinfo : rows) {
+			haversine(userinfo.getUserName(), lat, userinfo.getLat(), longitude, userinfo.getLongt(), distanceMapUser);
 		}
 		distanceMapUser = sortByValues(distanceMapUser);
 		Double quantitySum = 0.0;
 		List<String> userAvailableList = new ArrayList<String>();
 		for (final Entry<String, Double> entry : distanceMapUser.entrySet()) {
-			if(quantitySum < quantity){
+			if (quantitySum < quantity) {
 				quantitySum = quantitySum + entry.getValue();
 				userAvailableList.add(entry.getKey());
 			}
 		}
-		
-		for(String userAvailable : userAvailableList){
-			String returnFarmerQuery="select l.Name , l.Address , l.Phone , o.Price , o.Qty  From Login l, OrderAvailable o , Commodity c Where userName =? AND c.id = o.id AND English = ?";
-			 return jdbcTemplate.query(returnFarmerQuery,new Object[]{userAvailable,item},new BeanPropertyRowMapper(UserDetailWithItem.class));
+
+		for (String userAvailable : userAvailableList) {
+			String returnFarmerQuery = "select l.Name , l.Address , l.Phone , o.Price , o.Qty  From Login l, OrderAvailable o , Commodity c Where userName =? AND c.id = o.id AND English = ?";
+			return jdbcTemplate.query(returnFarmerQuery, new Object[] { userAvailable, item },
+					new BeanPropertyRowMapper(UserDetailWithItem.class));
 		}
-		
-		
+
 		return null;
 
 	}
@@ -100,11 +99,11 @@ public class RetailerDAOImpl implements RetailerDAO {
 			if ((latreq != 0.0) && (lonreq != 0.0)) {
 				sortedDistanceMap.put(key, R * c * Miles);
 			}
-			
+
 		}
-		
+
 	}
-	
+
 	public static <K extends Comparable, V extends Comparable> Map<K, V> sortByValues(final Map<K, V> sortedDistanceMap)
 	{
 		final List<Map.Entry<K, V>> entries = new LinkedList<Map.Entry<K, V>>(sortedDistanceMap.entrySet());
@@ -128,19 +127,19 @@ public class RetailerDAOImpl implements RetailerDAO {
 
 		return map;
 	}
-	
-	public OrderHistory getOrderHistory(String username) {
+
+	public OrderHistory getOrderHistory(String username)
+	{
 
 		String sql = "SELECT * FROM OrderSuccesfulHistory where retailerusername = ?";
-		return jdbcTemplate.queryForObject(sql, new Object[] { username },
-				new OrderHistoryMapper());
+		return jdbcTemplate.queryForObject(sql, new Object[] { username }, new OrderHistoryMapper());
 	}
 
-	public static final class OrderHistoryMapper implements
-			RowMapper<OrderHistory> {
+	public static final class OrderHistoryMapper implements RowMapper<OrderHistory>
+	{
 		@Override
-		public OrderHistory mapRow(ResultSet rs, int rowNum)
-				throws SQLException {
+		public OrderHistory mapRow(ResultSet rs, int rowNum) throws SQLException
+		{
 			OrderHistory orderHistory = new OrderHistory();
 			orderHistory.setFrmrusername(rs.getString("frmrusername"));
 			orderHistory.setDate(rs.getDate("date"));
@@ -150,12 +149,38 @@ public class RetailerDAOImpl implements RetailerDAO {
 			return orderHistory;
 		}
 	}
-	
+
 	@Override
-	public List<CommodityListBean> getCommodityList() {
+	public List<CommodityListBean> getCommodityList()
+	{
 		List<CommodityListBean> returnCommodityListBean = new ArrayList<CommodityListBean>();
 		String commodityQuery = "SELECT English,Price,Quantity From Commodity c,Mcx m where m.id=c.id";
-		return jdbcTemplate.query(commodityQuery,
-				new BeanPropertyRowMapper(CommodityListBean.class));
+		return jdbcTemplate.query(commodityQuery, new BeanPropertyRowMapper(CommodityListBean.class));
+	}
+
+	@Override
+	public User getFarmerDetails(String username)
+	{
+		String sql = "SELECT * FROM Login where UserName = ?";
+		return jdbcTemplate.queryForObject(sql, new Object[] { username }, new UserMapper());
+
+	}
+
+	public static final class UserMapper implements RowMapper<User>
+	{
+		@Override
+		public User mapRow(ResultSet rs, int rowNum) throws SQLException
+		{
+			User customer = new User();
+			customer.setAddress(rs.getString("Address"));
+			customer.setPhone(rs.getString("Phone"));
+			customer.setLongt(rs.getDouble("Longt"));
+			customer.setLat(rs.getDouble("Lat"));
+			customer.setName(rs.getString("Name"));
+			customer.setPassword(rs.getString("Password"));
+			customer.setUsername(rs.getString("UserName"));
+			customer.setType(rs.getString("Type"));
+			return customer;
+		}
 	}
 }
