@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.kisankrishibazar.config.WebConfig;
 import com.kisankrishibazar.dao.LoginDAO;
+import com.kisankrishibazar.dao.RetailerDAO;
 import com.kisankrishibazar.dao.impl.JdbcConfiguration;
 import com.kisankrishibazar.services.impl.KisankrishiServices;
 
@@ -26,6 +27,7 @@ public class App
 		ctx.getEnvironment().setActiveProfiles("default");
 		ctx.scan(JdbcConfiguration.class.getPackage().getName());		
 		bean.put("loginDao", ctx.getBean(LoginDAO.class));
+		bean.put("retailerDao", ctx.getBean(RetailerDAO.class));
 		new WebConfig(ctx.getBean(KisankrishiServices.class), bean);
 		ctx.registerShutdownHook();
 		
