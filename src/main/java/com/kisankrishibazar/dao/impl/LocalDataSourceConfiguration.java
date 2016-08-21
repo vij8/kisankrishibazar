@@ -19,7 +19,7 @@ public class LocalDataSourceConfiguration implements DataSourceConfiguration
 	{
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setPassword("admin");
-		dataSource.setUrl("jdbc:mysql://localhost:3306/krishi?useSSL=false");
+		dataSource.setUrl("jdbc:mysql://10.216.241.192:3306/krishi?useSSL=false");
 		dataSource.setUsername("root");
 		dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
 		return dataSource;

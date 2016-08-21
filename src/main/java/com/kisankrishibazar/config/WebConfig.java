@@ -5,30 +5,24 @@ import static spark.Spark.get;
 import static spark.Spark.halt;
 import static spark.Spark.post;
 
-
 import java.util.HashMap;
 import java.util.Map;
-
-
-import javax.xml.ws.RespectBinding;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.eclipse.jetty.util.MultiMap;
 import org.eclipse.jetty.util.UrlEncoded;
-
 
 import spark.ModelAndView;
 import spark.Request;
 import spark.Spark;
 import spark.template.freemarker.FreeMarkerEngine;
 
-
 import com.kisankrishibazar.dao.LoginDAO;
 import com.kisankrishibazar.dao.RetailerDAO;
 import com.kisankrishibazar.model.JsonTransformer;
 import com.kisankrishibazar.model.OrderAvailable;
-import com.kisankrishibazar.model.User;
 import com.kisankrishibazar.model.OrderHistory;
+import com.kisankrishibazar.model.User;
 import com.kisankrishibazar.services.impl.KisankrishiServices;
 
 public class WebConfig
@@ -62,17 +56,21 @@ public class WebConfig
 			Map<String, Object> map = new HashMap<>();
 			return new ModelAndView(map, "/login.ftl");
 		}, new FreeMarkerEngine());
-		
-		
+
 		get("/retailer/dashboard", (req, res) -> {
 			Map<String, Object> map = new HashMap<>();
 			return new ModelAndView(map, "/dashboard.ftl");
 		}, new FreeMarkerEngine());
-		
+		before("/retailer/dashboard", (req, res) -> {
+			User user = getAuthenticatedUser(req);
+			if (user == null) {
+				res.redirect("/retailer/home");
+				halt();
+			}
+		});
 
 		post("/retailer/login", (req, res) -> {
 
-			Map<String, Object> map = new HashMap<>();
 			User user = new User();
 			try {
 				MultiMap<String> params = new MultiMap<String>();
@@ -83,35 +81,23 @@ public class WebConfig
 				halt(501);
 				return null;
 			}
-			// LoginResult result = service.checkUser(user);
-
-				if (true) {
+			User exisistinguser = getAuthenticatedUser(req);
+			if (exisistinguser == null) {
+				user = dao.getUserDetail(user.getUsername(), user.getPassword());
+				if (user != null) {
 					addAuthenticatedUser(req, user);
-					// res.redirect("/");
-					// halt();
+				}
 			}
-			else {
-				map.put("error", "error");
+			else{
+				user =exisistinguser;
 			}
-			map.put("username", user.getUsername());
-			return dao.getUserDetail(user.getUsername(), user.getPassword());
+			return user;
 		}, new JsonTransformer());
-//		/*
-//		 * Checks if the user is already authenticated
-//		 */
-//		before("/retailer/login", (req, res) -> {
-//			User authUser = getAuthenticatedUser(req);
-//			if (authUser != null) {
-//				
-//			}
-//		});
-		/*
-		 * Register new User
-		 */
+
 		post("/retailer/register", (req, res) -> {
 			User user = new User();
 			try {
-				MultiMap<String> params = new MultiMap<String>();
+				MultiMap<String> params = new MultiMap<String>();	
 				UrlEncoded.decodeTo(req.body(), params, "UTF-8");
 				BeanUtils.populate(user, params);
 			}

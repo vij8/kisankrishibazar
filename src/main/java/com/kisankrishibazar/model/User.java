@@ -1,7 +1,5 @@
 package com.kisankrishibazar.model;
 
-import java.util.regex.Pattern;
-
 import spark.utils.StringUtils;
 
 public class User
