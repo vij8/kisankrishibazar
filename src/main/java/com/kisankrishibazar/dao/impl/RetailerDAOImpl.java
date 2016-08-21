@@ -3,14 +3,18 @@ package com.kisankrishibazar.dao.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.kisankrishibazar.dao.RetailerDAO;
+import com.kisankrishibazar.model.CommodityListBean;
 import com.kisankrishibazar.model.OrderAvailable;
 import com.kisankrishibazar.model.OrderHistory;
 import com.kisankrishibazar.model.User;
@@ -66,5 +70,13 @@ public class RetailerDAOImpl implements RetailerDAO {
 			orderHistory.setQty(rs.getInt("qty"));
 			return orderHistory;
 		}
+	}
+	
+	@Override
+	public List<CommodityListBean> getCommodityList() {
+		List<CommodityListBean> returnCommodityListBean = new ArrayList<CommodityListBean>();
+		String commodityQuery = "SELECT English,Price,Quantity From Commodity c,Mcx m where m.id=c.id";
+		return jdbcTemplate.query(commodityQuery,
+				new BeanPropertyRowMapper(CommodityListBean.class));
 	}
 }
