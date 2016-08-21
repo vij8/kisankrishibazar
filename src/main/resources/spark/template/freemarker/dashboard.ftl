@@ -44,7 +44,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="/retailer/home">
+                <a class="navbar-brand" href="index.html">
                     <img src="assets/img/logo.png" />
                 </a>
             </div>
@@ -113,24 +113,16 @@
                             <form role="form">
                                 <div class="form-group">
                                     <label>Products</label>
-                                    <select class="form-control products">
-                                        <option>One Vale</option>
-                                        <option>Two Vale</option>
-                                        <option>Three Vale</option>
-                                        <option>Four Vale</option>
-                                    </select>
+                                      <select class="form-control" id="products">
+                                      </select>
                                 </div>
-                                <div class="alert alert-info">
-                                    <strong>Todays Price</strong> Rupee
+                                <div class="alert alert-info priceDiv hide">
+                                    <strong>Todays Estimated Price</strong><span> Rs</span><span id="qtyPrice"></span><span> per kg</span>
                                 </div>
-                                <div class="form-group quantity">
+                                <div class="form-group quantityDiv hide">
                                     <label>Quantity</label>
-                                    <select class="form-control">
-                                        <option>One Vale</option>
-                                        <option>Two Vale</option>
-                                        <option>Three Vale</option>
-                                        <option>Four Vale</option>
-                                    </select>
+                       
+                                      <select class="form-control" id="quantity"></select>                          
                                 </div>
                             </form>
                             <hr>
@@ -141,14 +133,13 @@
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="table-responsive">
+                    <div class="table-responsive orderTable hide">
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>Quantity Available</th>
-                                    <th>Farmer Price</th>                                    
-                                    <th>Status</th>
-                                    <th>Delivery On </th>
+                                    <th id="name">Name</th>
+                                    <th id="qty">Quantity Available</th>
+                                    <th id="frmrPrice">Farmer Price</th>                                    
                                     <th>Mark Intrested</th>
                                     <th>Negotiate</th>
                                     <th>View Details</th>
