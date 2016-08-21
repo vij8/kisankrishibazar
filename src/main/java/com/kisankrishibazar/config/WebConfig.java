@@ -50,7 +50,7 @@ public class WebConfig
 	{
 
 		get("/farmer", (req, res) -> "hi I am farmer");
-		
+
 		get("/farmer/getCommodity", (req, res) -> {
 
 			String languageReq = req.queryParams("languageReq");

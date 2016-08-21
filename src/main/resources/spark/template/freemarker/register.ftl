@@ -44,7 +44,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="index.html">
+                <a class="navbar-brand" href="/retailer/home">
 
                     <strong>Kisan Krishi Bazar</strong>
                 </a>
@@ -73,7 +73,7 @@
  				<div class="col-md-12">
                         <div class="panel panel-default">
                         <div class="panel-heading">
-                           OTHER  FORM ELEMENTS
+                           ENTER USER DETAILS
                         </div>
                         <div  class="panel-body">
                             <form id="retailregister" id= role="form">
@@ -82,23 +82,23 @@
                             			 <input name="type" id="type" type="hidden" value="R" class="form-control" >	
                                         <div class="form-group has-success">
                                             <label class="control-label" for="success">USERNAME</label>
-                                            <input name = "username" type="text" class="form-control" id="success">
+                                            <input name = "username" type="text" placeholder="Enter UserName" class="form-control" id="success">
                                         </div>
                                         <div class="form-group has-success">
                                             <label class="control-label" for="warning">PASSWORD</label>
-                                            <input name= "password" type="text" class="form-control" id="warning">
+                                            <input name= "password" type="password" placeholder="Enter Password" class="form-control" id="warning">
                                         </div>
                                          <div class="form-group has-success">
                                             <label class="control-label" for="warning">COMPANY NAME</label>
-                                            <input name= "name" type="text" class="form-control" id="warning">
+                                            <input name= "name" type="text" placeholder="Enter Company Name"  class="form-control" id="warning">
                                         </div>
                                           <div class="form-group has-success">
                                             <label class="control-label" for="warning">COMPANY ADDRESS</label>
-                                           <textarea name= "address" class="form-control" rows="3" placeholder="Text Area"></textarea>
+                                           <textarea name= "address" class="form-control" rows="3" placeholder="Full Address"></textarea>
                                         </div>
                                         <div class="form-group has-success">
                                             <label class="control-label" for="error">PHONE NUMBER</label>
-                                            <input name="phone "type="text" class="form-control" id="error">
+                                            <input name="phone "type="text"  placeholder="Phone Number" class="form-control" id="error">
                                         </div>
                                          <hr>
                            			<a id="register" href="#" class="btn btn-success btn-sm">register me</a>
