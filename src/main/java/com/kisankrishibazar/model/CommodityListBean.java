@@ -1,9 +1,9 @@
 package com.kisankrishibazar.model;
 
 public class CommodityListBean {
-	private String english;
+	private String item;
 	private int quantity;
-	private Double price;
+	private float price;
 
 	public int getQuantity() {
 		return quantity;
@@ -13,19 +13,22 @@ public class CommodityListBean {
 		this.quantity = quantity;
 	}
 
-	public Double getPrice() {
+	public float getPrice() {
 		return price;
 	}
 
-	public void setPrice(Double price) {
+	public void setPrice(float price) {
 		this.price = price;
 	}
 
-	public String getEnglish() {
-		return english;
+	public String getItem() {
+		return item;
 	}
 
-	public void setEnglish(String english) {
-		this.english = english;
+	public void setItem(String item) {
+		this.item = item;
 	}
+
+	
+	
 }

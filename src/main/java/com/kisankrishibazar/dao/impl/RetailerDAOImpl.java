@@ -49,6 +49,7 @@ public class RetailerDAOImpl implements RetailerDAO
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public List<UserDetailWithItem> getOrderAvailable(String item, int quantity, Double lat, Double longitude)
 	{
 		String sql = "select  l.lat,l.longt,o.username from Commodity c, OrderAvailable o , login l where  c.id=o.id  and  l.username = o .userName  and c.English = ?";
@@ -150,10 +151,11 @@ public class RetailerDAOImpl implements RetailerDAO
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<CommodityListBean> getCommodityList()
 	{
-		List<CommodityListBean> returnCommodityListBean = new ArrayList<CommodityListBean>();
+		
 		String commodityQuery = "SELECT English,Price,Quantity From Commodity c,Mcx m where m.id=c.id";
 		return jdbcTemplate.query(commodityQuery, new BeanPropertyRowMapper(CommodityListBean.class));
 	}

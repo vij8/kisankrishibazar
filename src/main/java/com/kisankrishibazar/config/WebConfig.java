@@ -41,6 +41,7 @@ public class WebConfig
 		this.kisanKrishiServices = service;
 		this.dao = (LoginDAO) map.get("loginDao");
 		this.retailerDao = (RetailerDAO) map.get("retailerDao");
+		this.farmerDao = (FarmerDAO) map.get("farmerDao");
 		Spark.staticFileLocation("/public");
 		setupFarmerRoutes();
 		setupReatilerRoutes();
