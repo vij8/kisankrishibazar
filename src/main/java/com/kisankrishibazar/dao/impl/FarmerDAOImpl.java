@@ -1,5 +1,7 @@
 package com.kisankrishibazar.dao.impl;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,12 +11,16 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.kisankrishibazar.dao.FarmerDAO;
+import com.kisankrishibazar.dao.impl.LoginDAOImpl.UserMapper;
 import com.kisankrishibazar.model.CommodityListBean;
+import com.kisankrishibazar.model.FarmerOrderAvailable;
 import com.kisankrishibazar.model.FarmerOrderInsert;
 import com.kisankrishibazar.model.OrderHistory;
+import com.kisankrishibazar.model.User;
 
 @Repository
 public class FarmerDAOImpl implements FarmerDAO {
@@ -42,7 +48,7 @@ public class FarmerDAOImpl implements FarmerDAO {
 		return returnCommodityListBean;
 	}
 
-	public Boolean insertOrderAvailable(FarmerOrderInsert farmerOrderInsert)
+	public boolean insertOrderAvailable(FarmerOrderInsert farmerOrderInsert)
 	{
 		String selectQuery = "select c.id from translation t,commodity c where c.English=t.English and t."+ farmerOrderInsert.getLanguage()+ "= ?" ;
 		int id = jdbcTemplate.queryForObject(selectQuery,new Object[] {farmerOrderInsert.getItem()}, Integer.class);						
@@ -56,6 +62,40 @@ public class FarmerDAOImpl implements FarmerDAO {
 		}
 		else {
 			return false;
+		}
+	}
+	
+	public boolean deleteOrder(int orderId)
+	{
+						
+		String query = "Delete from OrderAvailable where orderAvailableId = ?";
+		int[] types = new int[] { Types.INTEGER};
+		int row = jdbcTemplate.update(query, new Object[] {orderId}, types);
+		if (row > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	
+	public FarmerOrderAvailable getOrderAvailable(String username){
+		String sql = "SELECT * FROM orderAvailable where UserName = ?";
+		return jdbcTemplate.queryForObject(sql, new Object[] { username}, new OrderMapper());		
+	}
+	public static final class OrderMapper implements RowMapper<FarmerOrderAvailable>
+	{
+		@Override
+		public FarmerOrderAvailable mapRow(ResultSet rs, int rowNum) throws SQLException
+		{
+			FarmerOrderAvailable farmerOrderAvailable = new FarmerOrderAvailable();
+			farmerOrderAvailable.setOrderId(rs.getInt("OrderAvailableId"));
+			farmerOrderAvailable.setEstimatedprice(rs.getFloat("estimatedPrice"));
+			farmerOrderAvailable.setQuotedprice(rs.getFloat("quotedPrice"));
+			farmerOrderAvailable.setDate(rs.getDate("date"));
+			farmerOrderAvailable.setQty(rs.getInt("Qty"));
+			farmerOrderAvailable.setId(rs.getInt("id"));
+			return farmerOrderAvailable;
 		}
 	}
 }

@@ -78,6 +78,20 @@ public class WebConfig
 				return "FAIL";
 			}
 		}, new JsonTransformer());
+		
+		get("/farmer/getOrderHistory", (req, res) -> {
+        
+           return  farmerDao.getOrderAvailable(req.queryParams("username"));
+		}, new JsonTransformer());
+		
+		get("/farmer/deleteOrder", (req, res) -> {
+			boolean deleteOrder =  farmerDao.deleteOrder(Integer.parseInt(req.queryParams("orderId")));
+			if(deleteOrder){
+				return "PASS";
+			}else{
+				return "FAIL";
+			}   
+			}, new JsonTransformer());
 
 	}
 
