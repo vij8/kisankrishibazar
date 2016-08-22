@@ -7,26 +7,18 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
-
 import javax.inject.Inject;
 
-import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
 import com.kisankrishibazar.dao.RetailerDAO;
 import com.kisankrishibazar.model.CommodityListBean;
-import com.kisankrishibazar.model.OrderAvailable;
 import com.kisankrishibazar.model.OrderHistory;
 import com.kisankrishibazar.model.User;
-import com.kisankrishibazar.model.UserDetailWithItem;
 import com.kisankrishibazar.model.UserWithItem;
 
 @Repository
@@ -74,17 +66,19 @@ public class RetailerDAOImpl implements RetailerDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<UserWithItem> getOrderAvailable(String item,
-			int quantity, float lat, float longitude) {
+	public List<UserWithItem> getOrderAvailable(String item, int quantity,
+			float lat, float longitude) {
 		List<UserWithItem> returnUserWithItem = new ArrayList<UserWithItem>();
 		String sql = "select  l.lat,l.longt,l.name,l.Address,l.Phone,o.username,o.quotedPrice ,o.Qty from Commodity c, OrderAvailable o , login l where  c.id=o.id  and  l.username = o .userName and l.type='F' and c.English = ?";
-		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql,new Object[]{item});
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql,
+				new Object[] { item });
 
 		for (Map row : rows) {
 			UserWithItem userwithitem = new UserWithItem();
 			userwithitem.setAddress((String) row.get("Address"));
 			userwithitem.setQuantity((int) row.get("Qty"));
-			if(null!= row.get("Price")) userwithitem.setPrice((float) row.get("Price"));
+			if (null != row.get("Price"))
+				userwithitem.setPrice((float) row.get("Price"));
 			userwithitem.setLat((float) row.get("Lat"));
 			userwithitem.setLongt((float) row.get("Longt"));
 			userwithitem.setName((String) row.get("Name"));
@@ -93,7 +87,6 @@ public class RetailerDAOImpl implements RetailerDAO {
 			returnUserWithItem.add(userwithitem);
 		}
 
-		Map<String, Double> distanceMapUser = new HashMap<String, Double>();
 		for (UserWithItem userinfo : returnUserWithItem) {
 			haversine(userinfo.getUsername(), lat, userinfo.getLat(),
 					longitude, userinfo.getLongt(), userinfo);
@@ -102,30 +95,15 @@ public class RetailerDAOImpl implements RetailerDAO {
 		Double quantitySum = 0.0;
 		List<UserWithItem> returnSortedUserWithItem = new ArrayList<UserWithItem>();
 		for (UserWithItem returnUserWithItemEntry : returnUserWithItem) {
-			if(quantitySum < quantity){
-				quantitySum = quantitySum + returnUserWithItemEntry.getDistance();
+			if (quantitySum < quantity) {
+				quantitySum = quantitySum
+						+ returnUserWithItemEntry.getDistance();
 				returnSortedUserWithItem.add(returnUserWithItemEntry);
 			}
-			if(quantitySum>=quantity)  break;
-			
+			if (quantitySum >= quantity)
+				break;
+
 		}
-		
-		
-//		List<String> userAvailableList = new ArrayList<String>();
-//		for (final Entry<String, Double> entry : distanceMapUser.entrySet()) {
-//			if (quantitySum < quantity) {
-//				quantitySum = quantitySum + entry.getValue();
-//				userAvailableList.add(entry.getKey());
-//			}
-//		}
-
-//		for (String userAvailable : userAvailableList) {
-//			String returnFarmerQuery = "select l.Name , l.Address , l.Phone , o.Price , o.Qty  From Login l, OrderAvailable o , Commodity c Where userName =? AND c.id = o.id AND English = ?";
-//			return jdbcTemplate.query(returnFarmerQuery, new Object[] {
-//					userAvailable, item }, new BeanPropertyRowMapper(
-//					UserDetailWithItem.class));
-//		}
-
 		return returnSortedUserWithItem;
 
 	}
@@ -142,7 +120,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 			}
 
 		});
-		
+
 		return returnUserWithItem;
 
 	}
@@ -168,39 +146,12 @@ public class RetailerDAOImpl implements RetailerDAO {
 			final double c = 2 * Math.asin(Math.sqrt(a));
 
 			if ((latreq != 0.0) && (lonreq != 0.0)) {
-				// sortedDistanceMap.put(key, R * c * Miles);
 				userinfo.setDistance(R * c * Miles);
 			}
 
 		}
 
 	}
-
-	// public static <K extends Comparable, V extends Comparable> Map<K, V>
-	// sortByValues(final Map<K, V> sortedDistanceMap)
-	// {
-	// final List<Map.Entry<K, V>> entries = new LinkedList<Map.Entry<K,
-	// V>>(sortedDistanceMap.entrySet());
-	//
-	// Collections.sort(entries, new Comparator<Map.Entry<K, V>>()
-	// {
-	//
-	// @SuppressWarnings("unchecked")
-	// @Override
-	// public int compare(final Entry<K, V> o1, final Entry<K, V> o2)
-	// {
-	// return o1.getValue().compareTo(o2.getValue());
-	// }
-	// });
-	//
-	// final Map<K, V> map = new LinkedHashMap<K, V>();
-	//
-	// for (final Map.Entry<K, V> entry : entries) {
-	// map.put(entry.getKey(), entry.getValue());
-	// }
-	//
-	// return map;
-	// }
 
 	public OrderHistory getOrderHistory(String username) {
 
@@ -224,7 +175,6 @@ public class RetailerDAOImpl implements RetailerDAO {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<CommodityListBean> getCommodityList() {
 		List<CommodityListBean> retCommodityListBeans = new ArrayList<CommodityListBean>();
