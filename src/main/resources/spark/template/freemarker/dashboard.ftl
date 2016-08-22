@@ -126,20 +126,20 @@
                                 </div>
                             </form>
                             <hr>
-                            <a id="search" href="#" class="btn btn-success btn-sm">Search	</a>
+                            <a id="search" href="#" class="btn btn-success btn-sm hide">Search	</a>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="row">
                 <div class="col-md-12">
-                    <div class="table-responsive orderTable hide">
+                    <div class="table-responsive orderTable">
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th id="name">Name</th>
-                                    <th id="qty">Quantity Available</th>
-                                    <th id="frmrPrice">Farmer Price</th>                                    
+                                    <th>Name</th>
+                                    <th>Quantity Available</th>
+                                    <th>Farmer Price</th>                                    
                                     <th>Mark Intrested</th>
                                     <th>Negotiate</th>
                                     <th>View Details</th>
@@ -147,22 +147,23 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td># 2501</td>
-                                    <td>01/22/2015 </td>
+                                    <td id="name">Bhushan</td>
+                                    <td id="qty">15</td>
                                     <td>
-                                        <label class="label label-info">300 USD </label>
+                                        <label class="label label-info" id="frmrPrice">20</label>
                                     </td>
                                     <td>
-                                        <label class="label label-success">Delivered</label>
+                                       <button class="btn btn-xs btn-danger markInterested">Mark Interested</button>
                                     </td>
                                     <td>01/25/2015</td>
-                                    <td> <a href="#" class="btn btn-xs btn-danger">View</a> </td>
+                                    <td> <button class="btn btn-xs btn-danger viewDetails">View</button> </td>
                                 </tr>
                               
                             </tbody>
                         </table>
                     </div>
                     <div>
+                    <div id="mymodal"></div>
                     </div>
 
                 </div>

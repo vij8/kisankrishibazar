@@ -19,5 +19,7 @@ public interface RetailerDAO
     public User getFarmerDetails(String username);
     
     public List<CommodityListBean> getCommodityList();
+    
+    public Boolean saveOrderHistory(OrderHistory orderHistory);
 	
 }

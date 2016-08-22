@@ -8,6 +8,8 @@ public class OrderHistory
 	private String frmrusername;
 
 	private String retailerusername;
+	
+	public String item;
 
 	private Date date;
 
@@ -111,6 +113,14 @@ public class OrderHistory
 	public void setAddress(String address)
 	{
 		this.address = address;
+	}
+
+	public String getItem() {
+		return item;
+	}
+
+	public void setItem(String item) {
+		this.item = item;
 	}
 
 }

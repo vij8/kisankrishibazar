@@ -7,7 +7,7 @@ $(document).ready(function() {
         success: function( data, textStatus, jQxhr ){     	
            response = $.parseJSON(data);
            for(i=0; i<response.length; i=i+1){
-        	   $("#products").append("<option>" + response[i].english + "</option>");
+        	   $("#products").append("<option>" + response[i].item + "</option>");
    	    }
         },
         error: function( jqXhr, textStatus, errorThrown ){
@@ -17,10 +17,11 @@ $(document).ready(function() {
 	$('#products').change(function() {
 		$("#quantity option").remove();
 		$(".priceDiv").removeClass('hide');	
-		$(".quantityDiv").removeClass('hide');			
+		$(".quantityDiv").removeClass('hide');
+		$("#search").removeClass('hide');
 		var item = $("#products option:selected").text();
         for(i=0; i<response.length; i=i+1){
-        	if(response[i].english == item){
+        	if(response[i].item == item){
         		$("#qtyPrice").text(response[i].price);
         		for(j=1;j<=response[i].quantity;j++){
         			$("#quantity").append("<option>" + j + "</option>");
@@ -42,7 +43,14 @@ $(document).ready(function() {
 	           url: '/retailer/orderAvailable',
 	           type: 'get',
 	           contentType: 'application/x-www-form-urlencoded',
+	           data : {
+					item : item,
+					qty : qty,
+					lat : lat,
+					longt : longt
+				},
 	           success: function( data, textStatus, jQxhr ){
+	        	  $(".orderTable").removeClass('hide');	
 	              alert("test");
 	           },
 	           error: function( jqXhr, textStatus, errorThrown ){
@@ -50,6 +58,66 @@ $(document).ready(function() {
 	           }
 	       });
 	 });
+	
+	$(".markInterested").click(function() {
+	       var item =  $('#products :selected').text();
+	       var details = $.parseJSON(localStorage.getItem('userdetail'));
+	       var response = $.parseJSON(details);
+	       var retailerusername = response.username;
+	       var frmrusername = $('#name').text();
+	       var qty = $('#qty').text();
+	       var price = $('#frmrPrice').text();
+	       $.ajax({
+	           url: '/retailer/saveOrder',
+	           type: 'get',
+	           contentType: 'application/x-www-form-urlencoded',
+	           data : {
+					item : item,
+					qty : qty,
+					frmrusername : frmrusername,
+					retailerusername : retailerusername,
+					price : price
+				},
+	           success: function( data, textStatus, jQxhr ){
+	             var response = $.parseJSON(data);
+	             if(response == "PASS"){
+	            	 $(".markInterested").attr("disabled","disabled");
+	             }
+	           },
+	           error: function( jqXhr, textStatus, errorThrown ){
+	               console.log( errorThrown );
+	           }
+	       });
+	 });
+	
+	$(".viewDetails").click(function() {
+		var strVar="";
+		strVar += "<div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\" style=\"display: none;\">";
+		strVar += "	<div class=\"modal-dialog\">";
+		strVar += "		<div class=\"modal-content\">";
+		strVar += "			<div class=\"modal-header\">";
+		strVar += "				<button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×<\/button>";
+		strVar += "				<h4 class=\"modal-title\" id=\"myModalLabel\">Farmer Detail<\/h4>";
+		strVar += "			<\/div>";
+		strVar += "			<div class=\"modal-body\">";
+		strVar += "					Phone : 9575934  <br\/>";
+		strVar += "					Address : dbdfjs<br\/>";
+		strVar += "             <\/div>";
+		strVar += "			<div class=\"modal-footer\">";
+		strVar += "				<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close<\/button>";			
+		strVar += "			<\/div>";
+		strVar += "		<\/div>";
+		strVar += "	<\/div>";
+		strVar += "<\/div>";
+		strVar += "";
+		strVar += "";
+		strVar += "";
+		strVar += "";
+		$("#mymodal").html(strVar);
+		$('#myModal').modal('show'); 
+		
+	}); 
+	
 }); 
 
 

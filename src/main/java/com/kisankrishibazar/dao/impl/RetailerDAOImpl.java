@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -49,6 +50,22 @@ public class RetailerDAOImpl implements RetailerDAO
 		}
 	}
 
+	public Boolean saveOrderHistory(OrderHistory orderHistory)
+	{
+		String selectQuery = "select id from Commodity where English = ? ";
+		int id = jdbcTemplate.queryForObject(selectQuery,new Object[] {orderHistory.getItem()}, Integer.class);						
+		String query = "INSERT INTO OrderSuccesfulHistory (FrmrUserName, RetailerUserName , Date , id , Price, Qty) VALUES (?,?,?,?,?,?)";
+		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.INTEGER, Types.FLOAT,Types.INTEGER};
+		Calendar calendar = Calendar.getInstance();
+        java.sql.Date startDate = new java.sql.Date(calendar.getTime().getTime());
+		int row = jdbcTemplate.update(query, new Object[] { orderHistory.getFrmrusername(),orderHistory.getRetailerusername(),startDate,id,orderHistory.getPrice(),orderHistory.getQty()}, types);
+		if (row > 0) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
 	@SuppressWarnings("unchecked")
 	public List<UserDetailWithItem> getOrderAvailable(String item, int quantity, Double lat, Double longitude)
 	{
@@ -155,9 +172,17 @@ public class RetailerDAOImpl implements RetailerDAO
 	@Override
 	public List<CommodityListBean> getCommodityList()
 	{
-		
+		List<CommodityListBean> retCommodityListBeans = new ArrayList<CommodityListBean>();
 		String commodityQuery = "SELECT English,Price,Quantity From Commodity c,Mcx m where m.id=c.id";
-		return jdbcTemplate.query(commodityQuery, new BeanPropertyRowMapper(CommodityListBean.class));
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(commodityQuery);
+		for(Map row : rows){
+			CommodityListBean commodityListBean = new CommodityListBean();
+			commodityListBean.setItem((String) row.get("English"));
+			commodityListBean.setPrice((float) row.get("Price"));
+			commodityListBean.setQuantity((int) row.get("Quantity"));
+			retCommodityListBeans.add(commodityListBean);
+		}
+		return retCommodityListBeans;
 	}
 
 	@Override
