@@ -183,7 +183,7 @@ public class WebConfig
 			OrderAvailable orderAvailable = new OrderAvailable();
 			try {
 				MultiMap<String> params = new MultiMap<String>();
-				UrlEncoded.decodeTo(req.body(), params, "UTF-8");
+				UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
 				BeanUtils.populate(orderAvailable, params);
 			}
 			catch (Exception e) {

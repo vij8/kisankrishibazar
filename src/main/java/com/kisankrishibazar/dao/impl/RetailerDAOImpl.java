@@ -30,74 +30,126 @@ import com.kisankrishibazar.model.UserDetailWithItem;
 import com.kisankrishibazar.model.UserWithItem;
 
 @Repository
-public class RetailerDAOImpl implements RetailerDAO
-{
+public class RetailerDAOImpl implements RetailerDAO {
 	@Inject
 	private JdbcTemplate jdbcTemplate;
 
-	public Boolean registerNewUser(User user)
-	{
+	public Boolean registerNewUser(User user) {
 		String query = "INSERT INTO Login (UserName, Name , Password , Type , Lat, Longt, Address, Phone) VALUES (?,?,?,?,?,?,?,?)";
-		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.VARCHAR, Types.DOUBLE,
-				Types.DOUBLE, Types.VARCHAR, Types.VARCHAR };
-		int row = jdbcTemplate.update(query, new Object[] { user.getUsername(), user.getName(), user.getPassword(),
-				user.getType(), user.getLat(), user.getLongt(), user.getAddress(), user.getPhone() }, types);
+		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.VARCHAR,
+				Types.VARCHAR, Types.DOUBLE, Types.DOUBLE, Types.VARCHAR,
+				Types.VARCHAR };
+		int row = jdbcTemplate.update(
+				query,
+				new Object[] { user.getUsername(), user.getName(),
+						user.getPassword(), user.getType(), user.getLat(),
+						user.getLongt(), user.getAddress(), user.getPhone() },
+				types);
 		if (row > 0) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
 
-	public Boolean saveOrderHistory(OrderHistory orderHistory)
-	{
+	public Boolean saveOrderHistory(OrderHistory orderHistory) {
 		String selectQuery = "select id from Commodity where English = ? ";
-		int id = jdbcTemplate.queryForObject(selectQuery,new Object[] {orderHistory.getItem()}, Integer.class);						
+		int id = jdbcTemplate.queryForObject(selectQuery,
+				new Object[] { orderHistory.getItem() }, Integer.class);
 		String query = "INSERT INTO OrderSuccesfulHistory (FrmrUserName, RetailerUserName , Date , id , Price, Qty) VALUES (?,?,?,?,?,?)";
-		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.DATE, Types.INTEGER, Types.FLOAT,Types.INTEGER};
+		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.DATE,
+				Types.INTEGER, Types.FLOAT, Types.INTEGER };
 		Calendar calendar = Calendar.getInstance();
-        java.sql.Date startDate = new java.sql.Date(calendar.getTime().getTime());
-		int row = jdbcTemplate.update(query, new Object[] { orderHistory.getFrmrusername(),orderHistory.getRetailerusername(),startDate,id,orderHistory.getPrice(),orderHistory.getQty()}, types);
+		java.sql.Date startDate = new java.sql.Date(calendar.getTime()
+				.getTime());
+		int row = jdbcTemplate
+				.update(query, new Object[] { orderHistory.getFrmrusername(),
+						orderHistory.getRetailerusername(), startDate, id,
+						orderHistory.getPrice(), orderHistory.getQty() }, types);
 		if (row > 0) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
+
 	@SuppressWarnings("unchecked")
-	public List<UserDetailWithItem> getOrderAvailable(String item, int quantity, Double lat, Double longitude)
-	{
-		String sql = "select  l.lat,l.longt,o.username from Commodity c, OrderAvailable o , login l where  c.id=o.id  and  l.username = o .userName  and c.English = ?";
-		List<UserWithItem> rows = jdbcTemplate.query(sql, new BeanPropertyRowMapper(UserWithItem.class));
+	public List<UserWithItem> getOrderAvailable(String item,
+			int quantity, float lat, float longitude) {
+		List<UserWithItem> returnUserWithItem = new ArrayList<UserWithItem>();
+		String sql = "select  l.lat,l.longt,l.name,l.Address,l.Phone,o.username,o.quotedPrice ,o.Qty from Commodity c, OrderAvailable o , login l where  c.id=o.id  and  l.username = o .userName and l.type='F' and c.English = ?";
+		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql,new Object[]{item});
+
+		for (Map row : rows) {
+			UserWithItem userwithitem = new UserWithItem();
+			userwithitem.setAddress((String) row.get("Address"));
+			userwithitem.setQuantity((int) row.get("Qty"));
+			if(null!= row.get("Price")) userwithitem.setPrice((float) row.get("Price"));
+			userwithitem.setLat((float) row.get("Lat"));
+			userwithitem.setLongt((float) row.get("Longt"));
+			userwithitem.setName((String) row.get("Name"));
+			userwithitem.setPhone((String) row.get("Phone"));
+			userwithitem.setUsername((String) row.get("UserName"));
+			returnUserWithItem.add(userwithitem);
+		}
+
 		Map<String, Double> distanceMapUser = new HashMap<String, Double>();
-		for (UserWithItem userinfo : rows) {
-			haversine(userinfo.getUserName(), lat, userinfo.getLat(), longitude, userinfo.getLongt(), distanceMapUser);
+		for (UserWithItem userinfo : returnUserWithItem) {
+			haversine(userinfo.getUsername(), lat, userinfo.getLat(),
+					longitude, userinfo.getLongt(), userinfo);
 		}
-		distanceMapUser = sortByValues(distanceMapUser);
+		returnUserWithItem = sortByValues(returnUserWithItem);
 		Double quantitySum = 0.0;
-		List<String> userAvailableList = new ArrayList<String>();
-		for (final Entry<String, Double> entry : distanceMapUser.entrySet()) {
-			if (quantitySum < quantity) {
-				quantitySum = quantitySum + entry.getValue();
-				userAvailableList.add(entry.getKey());
+		List<UserWithItem> returnSortedUserWithItem = new ArrayList<UserWithItem>();
+		for (UserWithItem returnUserWithItemEntry : returnUserWithItem) {
+			if(quantitySum < quantity){
+				quantitySum = quantitySum + returnUserWithItemEntry.getDistance();
+				returnSortedUserWithItem.add(returnUserWithItemEntry);
 			}
+			if(quantitySum>=quantity)  break;
+			
 		}
+		
+		
+//		List<String> userAvailableList = new ArrayList<String>();
+//		for (final Entry<String, Double> entry : distanceMapUser.entrySet()) {
+//			if (quantitySum < quantity) {
+//				quantitySum = quantitySum + entry.getValue();
+//				userAvailableList.add(entry.getKey());
+//			}
+//		}
 
-		for (String userAvailable : userAvailableList) {
-			String returnFarmerQuery = "select l.Name , l.Address , l.Phone , o.Price , o.Qty  From Login l, OrderAvailable o , Commodity c Where userName =? AND c.id = o.id AND English = ?";
-			return jdbcTemplate.query(returnFarmerQuery, new Object[] { userAvailable, item },
-					new BeanPropertyRowMapper(UserDetailWithItem.class));
-		}
+//		for (String userAvailable : userAvailableList) {
+//			String returnFarmerQuery = "select l.Name , l.Address , l.Phone , o.Price , o.Qty  From Login l, OrderAvailable o , Commodity c Where userName =? AND c.id = o.id AND English = ?";
+//			return jdbcTemplate.query(returnFarmerQuery, new Object[] {
+//					userAvailable, item }, new BeanPropertyRowMapper(
+//					UserDetailWithItem.class));
+//		}
 
-		return null;
+		return returnSortedUserWithItem;
 
 	}
 
-	public static void haversine(final String key, final Double latreq, final Double latnode, final double lonreq,
-			final double lonnode, final Map<String, Double> sortedDistanceMap)
-	{
+	public static List<UserWithItem> sortByValues(
+			List<UserWithItem> returnUserWithItem) {
+
+		Collections.sort(returnUserWithItem, new Comparator<UserWithItem>() {
+
+			@Override
+			public int compare(UserWithItem o1, UserWithItem o2) {
+				return o1.getDistance().compareTo(o2.getDistance());
+
+			}
+
+		});
+		
+		return returnUserWithItem;
+
+	}
+
+	public static void haversine(final String key, final double latreq,
+			final double latnode, final double lonreq, final double lonnode,
+			UserWithItem userinfo) {
 		if ((latnode != 0.0) && (lonnode != 0.0)) {
 			final double R = 6372.8; // In kilometers chane
 			final double Miles = 0.621371;
@@ -111,53 +163,57 @@ public class RetailerDAOImpl implements RetailerDAO
 			lat2 = Math.toRadians(lat2);
 
 			final double a = (Math.sin(dLat / 2) * Math.sin(dLat / 2))
-					+ (Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2));
+					+ (Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math
+							.cos(lat2));
 			final double c = 2 * Math.asin(Math.sqrt(a));
 
 			if ((latreq != 0.0) && (lonreq != 0.0)) {
-				sortedDistanceMap.put(key, R * c * Miles);
+				// sortedDistanceMap.put(key, R * c * Miles);
+				userinfo.setDistance(R * c * Miles);
 			}
 
 		}
 
 	}
 
-	public static <K extends Comparable, V extends Comparable> Map<K, V> sortByValues(final Map<K, V> sortedDistanceMap)
-	{
-		final List<Map.Entry<K, V>> entries = new LinkedList<Map.Entry<K, V>>(sortedDistanceMap.entrySet());
+	// public static <K extends Comparable, V extends Comparable> Map<K, V>
+	// sortByValues(final Map<K, V> sortedDistanceMap)
+	// {
+	// final List<Map.Entry<K, V>> entries = new LinkedList<Map.Entry<K,
+	// V>>(sortedDistanceMap.entrySet());
+	//
+	// Collections.sort(entries, new Comparator<Map.Entry<K, V>>()
+	// {
+	//
+	// @SuppressWarnings("unchecked")
+	// @Override
+	// public int compare(final Entry<K, V> o1, final Entry<K, V> o2)
+	// {
+	// return o1.getValue().compareTo(o2.getValue());
+	// }
+	// });
+	//
+	// final Map<K, V> map = new LinkedHashMap<K, V>();
+	//
+	// for (final Map.Entry<K, V> entry : entries) {
+	// map.put(entry.getKey(), entry.getValue());
+	// }
+	//
+	// return map;
+	// }
 
-		Collections.sort(entries, new Comparator<Map.Entry<K, V>>()
-		{
-
-			@SuppressWarnings("unchecked")
-			@Override
-			public int compare(final Entry<K, V> o1, final Entry<K, V> o2)
-			{
-				return o1.getValue().compareTo(o2.getValue());
-			}
-		});
-
-		final Map<K, V> map = new LinkedHashMap<K, V>();
-
-		for (final Map.Entry<K, V> entry : entries) {
-			sortedDistanceMap.put(entry.getKey(), entry.getValue());
-		}
-
-		return map;
-	}
-
-	public OrderHistory getOrderHistory(String username)
-	{
+	public OrderHistory getOrderHistory(String username) {
 
 		String sql = "SELECT * FROM OrderSuccesfulHistory where retailerusername = ?";
-		return jdbcTemplate.queryForObject(sql, new Object[] { username }, new OrderHistoryMapper());
+		return jdbcTemplate.queryForObject(sql, new Object[] { username },
+				new OrderHistoryMapper());
 	}
 
-	public static final class OrderHistoryMapper implements RowMapper<OrderHistory>
-	{
+	public static final class OrderHistoryMapper implements
+			RowMapper<OrderHistory> {
 		@Override
-		public OrderHistory mapRow(ResultSet rs, int rowNum) throws SQLException
-		{
+		public OrderHistory mapRow(ResultSet rs, int rowNum)
+				throws SQLException {
 			OrderHistory orderHistory = new OrderHistory();
 			orderHistory.setFrmrusername(rs.getString("frmrusername"));
 			orderHistory.setDate(rs.getDate("date"));
@@ -170,12 +226,12 @@ public class RetailerDAOImpl implements RetailerDAO
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<CommodityListBean> getCommodityList()
-	{
+	public List<CommodityListBean> getCommodityList() {
 		List<CommodityListBean> retCommodityListBeans = new ArrayList<CommodityListBean>();
 		String commodityQuery = "SELECT English,Price,Quantity From Commodity c,Mcx m where m.id=c.id";
-		List<Map<String, Object>> rows = jdbcTemplate.queryForList(commodityQuery);
-		for(Map row : rows){
+		List<Map<String, Object>> rows = jdbcTemplate
+				.queryForList(commodityQuery);
+		for (Map row : rows) {
 			CommodityListBean commodityListBean = new CommodityListBean();
 			commodityListBean.setItem((String) row.get("English"));
 			commodityListBean.setPrice((float) row.get("Price"));
@@ -186,18 +242,16 @@ public class RetailerDAOImpl implements RetailerDAO
 	}
 
 	@Override
-	public User getFarmerDetails(String username)
-	{
+	public User getFarmerDetails(String username) {
 		String sql = "SELECT * FROM Login where UserName = ?";
-		return jdbcTemplate.queryForObject(sql, new Object[] { username }, new UserMapper());
+		return jdbcTemplate.queryForObject(sql, new Object[] { username },
+				new UserMapper());
 
 	}
 
-	public static final class UserMapper implements RowMapper<User>
-	{
+	public static final class UserMapper implements RowMapper<User> {
 		@Override
-		public User mapRow(ResultSet rs, int rowNum) throws SQLException
-		{
+		public User mapRow(ResultSet rs, int rowNum) throws SQLException {
 			User customer = new User();
 			customer.setAddress(rs.getString("Address"));
 			customer.setPhone(rs.getString("Phone"));
