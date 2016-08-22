@@ -20,6 +20,7 @@ import spark.template.freemarker.FreeMarkerEngine;
 import com.kisankrishibazar.dao.FarmerDAO;
 import com.kisankrishibazar.dao.LoginDAO;
 import com.kisankrishibazar.dao.RetailerDAO;
+import com.kisankrishibazar.model.FarmerOrderInsert;
 import com.kisankrishibazar.model.JsonTransformer;
 import com.kisankrishibazar.model.OrderAvailable;
 import com.kisankrishibazar.model.OrderHistory;
@@ -56,6 +57,26 @@ public class WebConfig
 
 			String languageReq = req.queryParams("languageReq");
 			return farmerDao.getCommodityList(languageReq);
+		}, new JsonTransformer());
+		
+		get("/farmer/orderInsert", (req, res) -> {
+
+			FarmerOrderInsert farmerOrderInsert = new FarmerOrderInsert();
+			try {
+				MultiMap<String> params = new MultiMap<String>();
+				UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
+				BeanUtils.populate(farmerOrderInsert, params);
+			}
+			catch (Exception e) {
+				halt(501);
+				return null;
+			}
+			Boolean saveOrder =  farmerDao.insertOrderAvailable(farmerOrderInsert);
+			if(saveOrder){
+				return "PASS";
+			}else{
+				return "FAIL";
+			}
 		}, new JsonTransformer());
 
 	}
