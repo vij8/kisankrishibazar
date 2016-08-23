@@ -21,7 +21,7 @@ public class App
 {
 
 	public static void main(String[] args) throws SQLException
-	{
+	{		
 		AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext(App.class);
 		Map<String, Object> bean = new HashMap<String, Object>();
 		ctx.getEnvironment().setActiveProfiles("default");

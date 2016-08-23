@@ -44,6 +44,7 @@ public class WebConfig
 		this.retailerDao = (RetailerDAO) map.get("retailerDao");
 		this.farmerDao = (FarmerDAO) map.get("farmerDao");
 		Spark.staticFileLocation("/public");
+		Spark.port(8080);
 		setupFarmerRoutes();
 		setupReatilerRoutes();
 	}
