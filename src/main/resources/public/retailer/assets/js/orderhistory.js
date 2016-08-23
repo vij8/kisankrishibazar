@@ -1,21 +1,25 @@
 $(document).ready(function() {
-
+	var details = $.parseJSON(localStorage.getItem('userdetail'));
+    var response = $.parseJSON(details);
+    var retailerusername = response.username;
 	$.ajax({
 		url : '/retailer/orderHistory',
 		type : 'get',		
 		data : {
-			retailerusername:"shamim"
+			retailerusername : retailerusername
 		},
 		success : function(data, textStatus, jQxhr) {
 			var response = $.parseJSON(data);
 			var strVar="";
-			strVar += "<tr>";
-			strVar += "<td>"+response.date+ "<\/td>";
-			strVar += "<td>"+response.qty+"<\/td>";
-			strVar += "<td>"+response.price+"<\/td>";
-			strVar += "<td><a href=\"#\" onclick=\"getModal('"+response.frmrusername+"');return false;\" class=\"btn btn-info btn-xs\">show details<\/a><\/td>";
-			strVar += "<\/tr>";
-			$("#orderHistoryHtml").html(strVar);
+			for(i=0; i<response.length; i=i+1){			
+				strVar += "<tr>";
+				strVar += "<td>"+response[i].date+ "<\/td>";
+				strVar += "<td>"+response[i].qty+"<\/td>";
+				strVar += "<td>"+response[i].price+"<\/td>";
+				strVar += "<td><a href=\"#\" onclick=\"getModal('"+response[i].frmrusername+"');return false;\" class=\"btn btn-info btn-xs\">show details<\/a><\/td>";
+				strVar += "<\/tr>";
+				$("#orderHistoryHtml").html(strVar);
+			}	
 			
 
 		},

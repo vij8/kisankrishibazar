@@ -7,9 +7,11 @@ $(document).ready(function() {
         contentType: 'application/x-www-form-urlencoded',
         success: function( data, textStatus, jQxhr ){     	
            response = $.parseJSON(data);
-           for(i=0; i<response.length; i=i+1){
+           for(i=0; i<response.length; i=i+1){       	   
         	   $("#products").append("<option>" + response[i].item + "</option>");
    	    }
+           $("#products").prepend("<option disabled selected> Select your option </option>");
+           $('#products option:eq(0)').prop('selected', true);
         },
         error: function( jqXhr, textStatus, errorThrown ){
             console.log( errorThrown );

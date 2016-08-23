@@ -1,5 +1,6 @@
 package com.kisankrishibazar.dao.impl;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import javax.inject.Inject;
 
+import org.apache.commons.collections.map.HashedMap;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -152,11 +154,20 @@ public class RetailerDAOImpl implements RetailerDAO {
 
 	}
 
-	public OrderHistory getOrderHistory(String username) {
+	public List<OrderHistory> getOrderHistory(String username) {
 
-		String sql = "SELECT * FROM OrderSuccesfulHistory where retailerusername = ?";
-		return jdbcTemplate.queryForObject(sql, new Object[] { username },
-				new OrderHistoryMapper());
+		List<OrderHistory> returnRetailerHistory = new ArrayList<OrderHistory>();
+		String sql = "Select * from orderSuccesfulHistory where retailerUserName=?";
+		List<Map<String, Object>>  map = jdbcTemplate.queryForList(sql,new Object[] {username});
+		for(Map row : map){
+			OrderHistory orderHistory = new OrderHistory();
+			orderHistory.setDate((Date)row.get("Date"));
+			orderHistory.setFrmrusername((String)row.get("FrmrUserName"));
+			orderHistory.setPrice((float)row.get("Price"));
+			orderHistory.setQty((int)row.get("Qty"));
+			returnRetailerHistory.add(orderHistory);
+		}
+		return returnRetailerHistory;
 	}
 
 	public static final class OrderHistoryMapper implements

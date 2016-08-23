@@ -1,6 +1,7 @@
 package com.kisankrishibazar.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import com.kisankrishibazar.model.CommodityListBean;
 import com.kisankrishibazar.model.OrderHistory;
@@ -13,7 +14,7 @@ public interface RetailerDAO
     
     public List<UserWithItem> getStock(String item , int quantity , float lat, float longitude);
     
-    public OrderHistory getOrderHistory(String username);
+    public  List<OrderHistory> getOrderHistory(String username);
     
     public User getFarmerDetails(String username);
     
