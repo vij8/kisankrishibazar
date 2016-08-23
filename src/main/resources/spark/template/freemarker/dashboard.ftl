@@ -107,7 +107,7 @@
                 <div class="col-md-12">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            Products
+                            What Products do you want to buy?
                         </div>
                         <div class="panel-body">
                             <form role="form">
@@ -117,10 +117,10 @@
                                       </select>
                                 </div>
                                 <div class="alert alert-info priceDiv hide">
-                                    <strong>Todays Estimated Price</strong><span> Rs</span><span id="qtyPrice"></span><span> per kg</span>
+                                    <strong>Todays Estimated Price in MCX</strong><span> Rs</span><span id="qtyPrice"></span><span> per kg</span>
                                 </div>
                                 <div class="form-group quantityDiv hide">
-                                    <label>Quantity</label>
+                                    <label>Quantity(kg)</label>
                        
                                       <select class="form-control" id="quantity"></select>                          
                                 </div>
@@ -137,8 +137,8 @@
                         <table class="table table-striped table-bordered table-hover">
                             <thead>
                                 <tr>
-                                    <th>Name</th>
-                                    <th>Quantity Available</th>
+                                    <th>Farmer Name</th>
+                                    <th>Quantity Available(kg)</th>
                                     <th>Farmer Price</th>                                    
                                     <th>Mark Intrested</th>
                                     <th>Negotiate</th>

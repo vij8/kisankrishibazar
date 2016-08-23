@@ -33,6 +33,37 @@ $(document).ready(function() {
 		
 	});
 	
+	$(document).on('click', '.markInterested', function() {
+	       var item =  $('#products :selected').text();
+	       var details = $.parseJSON(localStorage.getItem('userdetail'));
+	       var response = $.parseJSON(details);
+	       var retailerusername = response.username;
+	       var frmrusername = $(this).closest('tr').find('.name').text();
+	       var qty = $(this).closest('tr').find('.quantity').text();
+	       var price = $(this).closest('tr').find('.frmrPrice').text();
+	       $.ajax({
+	           url: '/retailer/saveOrder',
+	           type: 'get',
+	           contentType: 'application/x-www-form-urlencoded',
+	           data : {
+					item : item,
+					qty : qty,
+					frmrusername : frmrusername,
+					retailerusername : retailerusername,
+					price : price
+				},
+	           success: function( data, textStatus, jQxhr ){
+	             var response = $.parseJSON(data);
+	             if(response == "PASS"){
+	            	 $(".markInterested").attr("disabled","disabled");
+	             }
+	           },
+	           error: function( jqXhr, textStatus, errorThrown ){
+	               console.log( errorThrown );
+	           }
+	       });
+	 });
+	
 	$("#search").click(function() {
 	       var item =  $('#products :selected').text();
 	       var qty = $('#quantity :selected').text();
@@ -58,13 +89,15 @@ $(document).ready(function() {
 	        		  userResultHtml += "<tr> <td class='name'>"+jsonResponse[i].name+"</td> "
 	        		  userResultHtml+= "<td class='quantity'>"+jsonResponse[i].quantity+"</td>"; 
 	        		  userResultHtml+=" <td>"
-	        		  userResultHtml+=" <label class='label label-info' id='frmrPrice'>"+jsonResponse[i].price+"</label>";
+	        		  userResultHtml+=" <label class='label label-info frmrPrice' >"+jsonResponse[i].price+"</label>";
 	        		  userResultHtml+="</td>";
 	        		  userResultHtml+="<td>";
 	        		  userResultHtml+="   <button class='btn btn-xs btn-danger markInterested'>Mark Interested</button>";
 	        		  userResultHtml+=" </td>";
 	        		  userResultHtml+=" <td>01/25/2015</td>";
-	        		  userResultHtml+="<td> <button class='btn btn-xs btn-danger viewDetails'>View</button> </td> <tr> ";
+	        		  userResultHtml+="<td> <button class='btn btn-xs btn-danger viewDetails'>View</button> </td></tr> ";
+	        		  userResultHtml+="<input type='hidden' class='address' value='>"+jsonResponse[i].address+"</input>";
+	        		  userResultHtml+="<input type='hidden' class='phoneno' value='>"+jsonResponse[i].phone+"</input>";
 	        	  }
 	        	  $(".userDetails").html(userResultHtml);
 	           },
@@ -74,38 +107,11 @@ $(document).ready(function() {
 	       });
 	 });
 	
-	$(".markInterested").click(function() {
-	       var item =  $('#products :selected').text();
-	       var details = $.parseJSON(localStorage.getItem('userdetail'));
-	       var response = $.parseJSON(details);
-	       var retailerusername = response.username;
-	       var frmrusername = $('#name').text();
-	       var qty = $('#qty').text();
-	       var price = $('#frmrPrice').text();
-	       $.ajax({
-	           url: '/retailer/saveOrder',
-	           type: 'get',
-	           contentType: 'application/x-www-form-urlencoded',
-	           data : {
-					item : item,
-					qty : qty,
-					frmrusername : frmrusername,
-					retailerusername : retailerusername,
-					price : price
-				},
-	           success: function( data, textStatus, jQxhr ){
-	             var response = $.parseJSON(data);
-	             if(response == "PASS"){
-	            	 $(".markInterested").attr("disabled","disabled");
-	             }
-	           },
-	           error: function( jqXhr, textStatus, errorThrown ){
-	               console.log( errorThrown );
-	           }
-	       });
-	 });
+
 	
-	$(".viewDetails").click(function() {
+	$(document).on('click', '.viewDetails', function() {
+		var address = $(this).closest('tr').find('.address').text();
+		var phoneno = $(this).closest('tr').find('.phoneno').text()	
 		var strVar="";
 		strVar += "<div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\" style=\"display: none;\">";
 		strVar += "	<div class=\"modal-dialog\">";
@@ -115,8 +121,8 @@ $(document).ready(function() {
 		strVar += "				<h4 class=\"modal-title\" id=\"myModalLabel\">Farmer Detail<\/h4>";
 		strVar += "			<\/div>";
 		strVar += "			<div class=\"modal-body\">";
-		strVar += "					Phone :"+jsonResponse.phone +"<br\/>";
-		strVar += "					Address :" +jsonResponse.address +"<br\/>";
+		strVar += "					Phone :"+phoneno +"<br\/>";
+		strVar += "					Address :" +address +"<br\/>";
 		strVar += "             <\/div>";
 		strVar += "			<div class=\"modal-footer\">";
 		strVar += "				<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close<\/button>";			
@@ -133,7 +139,9 @@ $(document).ready(function() {
 		
 	}); 
 	
-}); 
+});
+
+
 
 
 
