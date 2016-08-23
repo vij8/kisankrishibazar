@@ -27,8 +27,7 @@ import com.kisankrishibazar.model.OrderHistory;
 import com.kisankrishibazar.model.User;
 import com.kisankrishibazar.services.impl.KisankrishiServices;
 
-public class WebConfig
-{
+public class WebConfig {
 	private KisankrishiServices kisanKrishiServices;
 
 	private static final String USER_SESSION_ID = "user";
@@ -37,8 +36,7 @@ public class WebConfig
 	private RetailerDAO retailerDao;
 	private FarmerDAO farmerDao;
 
-	public WebConfig(KisankrishiServices service, Map<String, Object> map)
-	{
+	public WebConfig(KisankrishiServices service, Map<String, Object> map) {
 		this.kisanKrishiServices = service;
 		this.dao = (LoginDAO) map.get("loginDao");
 		this.retailerDao = (RetailerDAO) map.get("retailerDao");
@@ -49,34 +47,42 @@ public class WebConfig
 		setupReatilerRoutes();
 	}
 
-	private void setupFarmerRoutes()
-	{
+	private void setupFarmerRoutes() {
 
-		post("/farmer/login", (req, res) -> {
+		post("/farmer/login",
+				(req, res) -> {
 
-			User user = new User();
-			try {
-				MultiMap<String> params = new MultiMap<String>();
-				UrlEncoded.decodeTo(req.body(), params, "UTF-8");
-				BeanUtils.populate(user, params);
-			}
-			catch (Exception e) {
-				halt(501);
-				return null;
-			}
-			User exisistinguser = getAuthenticatedUser(req);
-			if (exisistinguser == null) {
-				user = dao.getFarmerUserDetail(user.getUsername(), user.getPassword());
-				if (user != null) {
-					addAuthenticatedUser(req, user);
-				}
-			}
-			else {
-				user = exisistinguser;
-			}
-			return user;
+					User user = new User();
+					try {
+						MultiMap<String> params = new MultiMap<String>();
+						UrlEncoded.decodeTo(req.body(), params, "UTF-8");
+						BeanUtils.populate(user, params);
+					} catch (Exception e) {
+						halt(501);
+						return null;
+					}
+					User exisistinguser = getAuthenticatedUser(req);
+					if (exisistinguser == null) {
+						user = dao.getFarmerUserDetail(user.getUsername(),
+								user.getPassword());
+						if (user != null) {
+							addAuthenticatedUser(req, user);
+						}
+					} else {
+						user = exisistinguser;
+					}
+					return user;
+				}, new JsonTransformer());
+
+		get("/farmer/Isvaliduser", (req, res) -> {
+			String userName = req.queryParams("username");
+			boolean userAlreadyExists = farmerDao.isValidUser(userName);
+			if (userAlreadyExists)
+				return "Fail ";
+			else
+				return "Success";
 		}, new JsonTransformer());
-		
+
 		get("/farmer", (req, res) -> "hi I am farmer");
 
 		get("/farmer/getCommodity", (req, res) -> {
@@ -84,50 +90,52 @@ public class WebConfig
 			String languageReq = req.queryParams("languageReq");
 			return farmerDao.getCommodityList(languageReq);
 		}, new JsonTransformer());
-		
-		get("/farmer/orderInsert", (req, res) -> {
 
-			FarmerOrderInsert farmerOrderInsert = new FarmerOrderInsert();
-			try {
-				MultiMap<String> params = new MultiMap<String>();
-				UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
-				BeanUtils.populate(farmerOrderInsert, params);
-			}
-			catch (Exception e) {
-				halt(501);
-				return null;
-			}
-			Boolean saveOrder =  farmerDao.insertOrderAvailable(farmerOrderInsert);
-			if(saveOrder){
-				return "PASS";
-			}else{
-				return "FAIL";
-			}
-		}, new JsonTransformer());
-		
+		get("/farmer/orderInsert",
+				(req, res) -> {
+
+					FarmerOrderInsert farmerOrderInsert = new FarmerOrderInsert();
+					try {
+						MultiMap<String> params = new MultiMap<String>();
+						UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
+						BeanUtils.populate(farmerOrderInsert, params);
+					} catch (Exception e) {
+						halt(501);
+						return null;
+					}
+					Boolean saveOrder = farmerDao
+							.insertOrderAvailable(farmerOrderInsert);
+					if (saveOrder) {
+						return "PASS";
+					} else {
+						return "FAIL";
+					}
+				}, new JsonTransformer());
+
 		get("/farmer/getOrderHistory", (req, res) -> {
-        
-           return  farmerDao.getOrderAvailable(req.queryParams("username"));
+
+			return farmerDao.getOrderAvailable(req.queryParams("username"));
 		}, new JsonTransformer());
-		
-		get("/farmer/deleteOrder", (req, res) -> {
-			boolean deleteOrder =  farmerDao.deleteOrder(Integer.parseInt(req.queryParams("orderId")));
-			if(deleteOrder){
-				return "PASS";
-			}else{
-				return "FAIL";
-			}   
-			}, new JsonTransformer());
-		
-		get("/farmer/translation", (req,res) -> {
+
+		get("/farmer/deleteOrder",
+				(req, res) -> {
+					boolean deleteOrder = farmerDao.deleteOrder(Integer
+							.parseInt(req.queryParams("orderId")));
+					if (deleteOrder) {
+						return "PASS";
+					} else {
+						return "FAIL";
+					}
+				}, new JsonTransformer());
+
+		get("/farmer/translation", (req, res) -> {
 			return farmerDao.getTranslation(req.queryParams("Language"));
-			 
-		},new JsonTransformer());
+
+		}, new JsonTransformer());
 
 	}
 
-	private void setupReatilerRoutes()
-	{
+	private void setupReatilerRoutes() {
 		get("/retailer/home	", (req, res) -> {
 			Map<String, Object> map = new HashMap<>();
 			return new ModelAndView(map, "/login.ftl");
@@ -137,7 +145,7 @@ public class WebConfig
 			Map<String, Object> map = new HashMap<>();
 			return new ModelAndView(map, "/register.ftl");
 		}, new FreeMarkerEngine());
-		
+
 		get("/retailer/orderhistory", (req, res) -> {
 			Map<String, Object> map = new HashMap<>();
 			return new ModelAndView(map, "/orderhistory.ftl");
@@ -149,7 +157,6 @@ public class WebConfig
 				halt();
 			}
 		});
-		
 
 		get("/retailer/dashboard", (req, res) -> {
 			Map<String, Object> map = new HashMap<>();
@@ -163,30 +170,30 @@ public class WebConfig
 			}
 		});
 
-		post("/retailer/login", (req, res) -> {
+		post("/retailer/login",
+				(req, res) -> {
 
-			User user = new User();
-			try {
-				MultiMap<String> params = new MultiMap<String>();
-				UrlEncoded.decodeTo(req.body(), params, "UTF-8");
-				BeanUtils.populate(user, params);
-			}
-			catch (Exception e) {
-				halt(501);
-				return null;
-			}
-			User exisistinguser = getAuthenticatedUser(req);
-			if (exisistinguser == null) {
-				user = dao.getUserDetail(user.getUsername(), user.getPassword());
-				if (user != null) {
-					addAuthenticatedUser(req, user);
-				}
-			}
-			else {
-				user = exisistinguser;
-			}
-			return user;
-		}, new JsonTransformer());
+					User user = new User();
+					try {
+						MultiMap<String> params = new MultiMap<String>();
+						UrlEncoded.decodeTo(req.body(), params, "UTF-8");
+						BeanUtils.populate(user, params);
+					} catch (Exception e) {
+						halt(501);
+						return null;
+					}
+					User exisistinguser = getAuthenticatedUser(req);
+					if (exisistinguser == null) {
+						user = dao.getUserDetail(user.getUsername(),
+								user.getPassword());
+						if (user != null) {
+							addAuthenticatedUser(req, user);
+						}
+					} else {
+						user = exisistinguser;
+					}
+					return user;
+				}, new JsonTransformer());
 
 		post("/retailer/register", (req, res) -> {
 			User user = new User();
@@ -194,16 +201,14 @@ public class WebConfig
 				MultiMap<String> params = new MultiMap<String>();
 				UrlEncoded.decodeTo(req.body(), params, "UTF-8");
 				BeanUtils.populate(user, params);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				halt(501);
 				return null;
 			}
 			Boolean result = retailerDao.registerNewUser(user);
 			if (result) {
 				return "SUCCESS";
-			}
-			else {
+			} else {
 				return "FAILURE";
 			}
 		}, new JsonTransformer());
@@ -216,12 +221,13 @@ public class WebConfig
 				MultiMap<String> params = new MultiMap<String>();
 				UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
 				BeanUtils.populate(orderAvailable, params);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				halt(501);
 				return null;
 			}
-			return retailerDao.getOrderAvailable(orderAvailable.getItem(),orderAvailable.getQty(),orderAvailable.getLat(),orderAvailable.getLongt());
+			return retailerDao.getOrderAvailable(orderAvailable.getItem(),
+					orderAvailable.getQty(), orderAvailable.getLat(),
+					orderAvailable.getLongt());
 		}, new JsonTransformer());
 
 		get("/retailer/getCommodity", (req, res) -> {
@@ -234,67 +240,63 @@ public class WebConfig
 				MultiMap<String> params = new MultiMap<String>();
 				UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
 				BeanUtils.populate(orderHistory, params);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				halt(501);
 				return null;
 			}
-			return retailerDao.getOrderHistory(orderHistory.getRetailerusername());
+			return retailerDao.getOrderHistory(orderHistory
+					.getRetailerusername());
 		}, new JsonTransformer());
-		
-		get("/retailer/farmerdetail", (req, res) -> {
-			OrderHistory orderHistory = new OrderHistory();
-			try {
-				MultiMap<String> params = new MultiMap<String>();
-				UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
-				BeanUtils.populate(orderHistory, params);
-			}
-			catch (Exception e) {
-				halt(501);
-				return null;
-			}
-			return retailerDao.getFarmerDetails(orderHistory.getFrmrusername());
-		}, new JsonTransformer());
-		
+
+		get("/retailer/farmerdetail",
+				(req, res) -> {
+					OrderHistory orderHistory = new OrderHistory();
+					try {
+						MultiMap<String> params = new MultiMap<String>();
+						UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
+						BeanUtils.populate(orderHistory, params);
+					} catch (Exception e) {
+						halt(501);
+						return null;
+					}
+					return retailerDao.getFarmerDetails(orderHistory
+							.getFrmrusername());
+				}, new JsonTransformer());
+
 		get("/retailer/saveOrder", (req, res) -> {
 			OrderHistory orderHistory = new OrderHistory();
 			try {
 				MultiMap<String> params = new MultiMap<String>();
 				UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
 				BeanUtils.populate(orderHistory, params);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				halt(501);
 				return null;
 			}
-			Boolean saveOrder =  retailerDao.saveOrderHistory(orderHistory);
-			if(saveOrder){
+			Boolean saveOrder = retailerDao.saveOrderHistory(orderHistory);
+			if (saveOrder) {
 				return "PASS";
-			}else{
+			} else {
 				return "FAIL";
 			}
 		}, new JsonTransformer());
 
 	}
 
-	private void addAuthenticatedUser(Request request, User u)
-	{
+	private void addAuthenticatedUser(Request request, User u) {
 		request.session().attribute(USER_SESSION_ID, u);
 
 	}
 
-	private User getAuthenticatedUser(Request request)
-	{
+	private User getAuthenticatedUser(Request request) {
 		return request.session().attribute(USER_SESSION_ID);
 	}
 
-	public KisankrishiServices getKisanKrishiServices()
-	{
+	public KisankrishiServices getKisanKrishiServices() {
 		return kisanKrishiServices;
 	}
 
-	public void setKisanKrishiServices(KisankrishiServices kisanKrishiServices)
-	{
+	public void setKisanKrishiServices(KisankrishiServices kisanKrishiServices) {
 		this.kisanKrishiServices = kisanKrishiServices;
 	}
 

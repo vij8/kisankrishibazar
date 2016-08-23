@@ -11,13 +11,15 @@ import com.kisankrishibazar.model.User;
 public interface FarmerDAO {
 
 	List<CommodityListBean> getCommodityList(String languageReq);
-	
+
 	boolean insertOrderAvailable(FarmerOrderInsert farmerOrderInsert);
-	
+
 	FarmerOrderAvailable getOrderAvailable(String username);
-	
-	Map<String,String> getTranslation(String language);
-	
+
+	Map<String, String> getTranslation(String language);
+
+	boolean isValidUser(String username);
+
 	boolean deleteOrder(int id);
 
 }

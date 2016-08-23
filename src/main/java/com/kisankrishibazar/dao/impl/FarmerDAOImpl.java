@@ -49,49 +49,56 @@ public class FarmerDAOImpl implements FarmerDAO {
 		return returnCommodityListBean;
 	}
 
-	public boolean insertOrderAvailable(FarmerOrderInsert farmerOrderInsert)
-	{
-		String selectQuery = "select c.id from translation t,commodity c where c.English=t.English and t."+ farmerOrderInsert.getLanguage()+ "= ?" ;
-		int id = jdbcTemplate.queryForObject(selectQuery,new Object[] {farmerOrderInsert.getItem()}, Integer.class);						
+	public boolean insertOrderAvailable(FarmerOrderInsert farmerOrderInsert) {
+		String selectQuery = "select c.id from translation t,commodity c where c.English=t.English and t."
+				+ farmerOrderInsert.getLanguage() + "= ?";
+		int id = jdbcTemplate.queryForObject(selectQuery,
+				new Object[] { farmerOrderInsert.getItem() }, Integer.class);
 		String query = "INSERT INTO OrderAvailable (UserName, id , estimatedPrice , quotedPrice , Date, Qty) VALUES (?,?,?,?,?,?)";
-		int[] types = new int[] { Types.VARCHAR, Types.INTEGER, Types.FLOAT, Types.FLOAT, Types.DATE,Types.INTEGER};
+		int[] types = new int[] { Types.VARCHAR, Types.INTEGER, Types.FLOAT,
+				Types.FLOAT, Types.DATE, Types.INTEGER };
 		Calendar calendar = Calendar.getInstance();
-        java.sql.Date startDate = new java.sql.Date(calendar.getTime().getTime());
-		int row = jdbcTemplate.update(query, new Object[] {farmerOrderInsert.getUsername(),id,farmerOrderInsert.getEstimatedprice(),farmerOrderInsert.getQuotedprice(),startDate,farmerOrderInsert.getQty() }, types);
+		java.sql.Date startDate = new java.sql.Date(calendar.getTime()
+				.getTime());
+		int row = jdbcTemplate.update(query,
+				new Object[] { farmerOrderInsert.getUsername(), id,
+						farmerOrderInsert.getEstimatedprice(),
+						farmerOrderInsert.getQuotedprice(), startDate,
+						farmerOrderInsert.getQty() }, types);
 		if (row > 0) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
-	
-	public boolean deleteOrder(int orderId)
-	{
-						
+
+	public boolean deleteOrder(int orderId) {
+
 		String query = "Delete from OrderAvailable where orderAvailableId = ?";
-		int[] types = new int[] { Types.INTEGER};
-		int row = jdbcTemplate.update(query, new Object[] {orderId}, types);
+		int[] types = new int[] { Types.INTEGER };
+		int row = jdbcTemplate.update(query, new Object[] { orderId }, types);
 		if (row > 0) {
 			return true;
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
-	
-	public FarmerOrderAvailable getOrderAvailable(String username){
+
+	public FarmerOrderAvailable getOrderAvailable(String username) {
 		String sql = "SELECT * FROM orderAvailable where UserName = ?";
-		return jdbcTemplate.queryForObject(sql, new Object[] { username}, new OrderMapper());		
+		return jdbcTemplate.queryForObject(sql, new Object[] { username },
+				new OrderMapper());
 	}
-	public static final class OrderMapper implements RowMapper<FarmerOrderAvailable>
-	{
+
+	public static final class OrderMapper implements
+			RowMapper<FarmerOrderAvailable> {
 		@Override
-		public FarmerOrderAvailable mapRow(ResultSet rs, int rowNum) throws SQLException
-		{
+		public FarmerOrderAvailable mapRow(ResultSet rs, int rowNum)
+				throws SQLException {
 			FarmerOrderAvailable farmerOrderAvailable = new FarmerOrderAvailable();
 			farmerOrderAvailable.setOrderId(rs.getInt("OrderAvailableId"));
-			farmerOrderAvailable.setEstimatedprice(rs.getFloat("estimatedPrice"));
+			farmerOrderAvailable.setEstimatedprice(rs
+					.getFloat("estimatedPrice"));
 			farmerOrderAvailable.setQuotedprice(rs.getFloat("quotedPrice"));
 			farmerOrderAvailable.setDate(rs.getDate("date"));
 			farmerOrderAvailable.setQty(rs.getInt("Qty"));
@@ -99,16 +106,31 @@ public class FarmerDAOImpl implements FarmerDAO {
 			return farmerOrderAvailable;
 		}
 	}
+
 	@Override
-	public Map<String,String> getTranslation(String language) {
-		
-		String getTranslationQuery = "Select Label,"+language+ " from Translation";
-		List<Map<String, Object>> map = jdbcTemplate.queryForList(getTranslationQuery);
-		Map<String,String> newMap = new HashMap<String,String>();
-		for(Map row : map){
-			newMap.put((String) row.get("Label"),(String) row.get(language));
-			
+	public Map<String, String> getTranslation(String language) {
+
+		String getTranslationQuery = "Select Label," + language
+				+ " from Translation";
+		List<Map<String, Object>> map = jdbcTemplate
+				.queryForList(getTranslationQuery);
+		Map<String, String> newMap = new HashMap<String, String>();
+		for (Map row : map) {
+			newMap.put((String) row.get("Label"), (String) row.get(language));
+
 		}
 		return newMap;
- 	}
+	}
+
+	@Override
+	public boolean isValidUser(String username) {
+		boolean userAlreadyExists = false;
+		String validateUserQuery = "Select name from login where username = ?";
+		String name = jdbcTemplate.queryForObject(validateUserQuery,
+				new Object[] { username }, String.class);
+		if (null != name) {
+			userAlreadyExists = true;
+		}
+		return userAlreadyExists;
+	}
 }
