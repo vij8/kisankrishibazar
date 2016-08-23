@@ -77,8 +77,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 			UserWithItem userwithitem = new UserWithItem();
 			userwithitem.setAddress((String) row.get("Address"));
 			userwithitem.setQuantity((int) row.get("Qty"));
-			if (null != row.get("Price"))
-				userwithitem.setPrice((float) row.get("Price"));
+			if (null != row.get("quotedPrice")) userwithitem.setPrice((float) row.get("quotedPrice"));
 			userwithitem.setLat((float) row.get("Lat"));
 			userwithitem.setLongt((float) row.get("Longt"));
 			userwithitem.setName((String) row.get("Name"));
