@@ -96,7 +96,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 		for (UserWithItem returnUserWithItemEntry : returnUserWithItem) {
 			if (quantitySum < quantity) {
 				quantitySum = quantitySum
-						+ returnUserWithItemEntry.getDistance();
+						+ returnUserWithItemEntry.getQuantity();
 				returnSortedUserWithItem.add(returnUserWithItemEntry);
 			}
 			if (quantitySum >= quantity)
