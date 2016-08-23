@@ -53,12 +53,20 @@ $(document).ready(function() {
 	           success: function( data, textStatus, jQxhr ){
 	        	  $(".orderTable").removeClass('hide');
 	        	  jsonResponse = $.parseJSON(data);
-	        	  for(i=0; i<jsonResponse.length; i=i+1){
-	        		  
+	        	  var userResultHtml = "";
+	        	  for(i=0; i<jsonResponse.length; i++){
+	        		  userResultHtml += "<tr> <td class='name'>"+jsonResponse[i].name+"</td> "
+	        		  userResultHtml+= "<td class='quantity'>"+jsonResponse[i].quantity+"</td>"; 
+	        		  userResultHtml+=" <td>"
+	        		  userResultHtml+=" <label class='label label-info' id='frmrPrice'>"+jsonResponse[i].price+"</label>";
+	        		  userResultHtml+="</td>";
+	        		  userResultHtml+="<td>";
+	        		  userResultHtml+="   <button class='btn btn-xs btn-danger markInterested'>Mark Interested</button>";
+	        		  userResultHtml+=" </td>";
+	        		  userResultHtml+=" <td>01/25/2015</td>";
+	        		  userResultHtml+="<td> <button class='btn btn-xs btn-danger viewDetails'>View</button> </td> <tr> ";
 	        	  }
-	        	  $("#name").val(jsonResponse.username);
-	        	  $("#qty").val(jsonResponse.quantity);
-	        	  $("#frmrPrice").val(jsonResponse.price);
+	        	  $(".userDetails").html(userResultHtml);
 	           },
 	           error: function( jqXhr, textStatus, errorThrown ){
 	               console.log( errorThrown );

@@ -145,19 +145,8 @@
                                     <th>View Details</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td id="name">Bhushan</td>
-                                    <td id="qty">15</td>
-                                    <td>
-                                        <label class="label label-info" id="frmrPrice">20</label>
-                                    </td>
-                                    <td>
-                                       <button class="btn btn-xs btn-danger markInterested">Mark Interested</button>
-                                    </td>
-                                    <td>01/25/2015</td>
-                                    <td> <button class="btn btn-xs btn-danger viewDetails">View</button> </td>
-                                </tr>
+                            <tbody class="userDetails">
+                               
                               
                             </tbody>
                         </table>
