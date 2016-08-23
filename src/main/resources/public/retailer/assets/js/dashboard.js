@@ -36,6 +36,7 @@ $(document).ready(function() {
 	});
 	
 	$(document).on('click', '.markInterested', function() {
+		var obj = $(this);
 	       var item =  $('#products :selected').text();
 	       var details = $.parseJSON(localStorage.getItem('userdetail'));
 	       var response = $.parseJSON(details);
@@ -57,7 +58,8 @@ $(document).ready(function() {
 	           success: function( data, textStatus, jQxhr ){
 	             var response = $.parseJSON(data);
 	             if(response == "PASS"){
-	            	 $(".markInterested").attr("disabled","disabled");
+	            	 alert(obj.text());
+	            	 obj.addClass("disabled");
 	             }
 	           },
 	           error: function( jqXhr, textStatus, errorThrown ){
