@@ -96,8 +96,8 @@ $(document).ready(function() {
 	        		  userResultHtml+=" </td>";
 	        		  userResultHtml+=" <td>01/25/2015</td>";
 	        		  userResultHtml+="<td> <button class='btn btn-xs btn-danger viewDetails'>View</button> </td></tr> ";
-	        		  userResultHtml+="<input type='hidden' class='address' value='>"+jsonResponse[i].address+"</input>";
-	        		  userResultHtml+="<input type='hidden' class='phoneno' value='>"+jsonResponse[i].phone+"</input>";
+	        		  userResultHtml+="<input type='hidden' class='address' value='" +jsonResponse[i].address+"'></input>";
+	        		  userResultHtml+="<input type='hidden' class='phoneno' value='"+jsonResponse[i].phone+"'></input>";
 	        	  }
 	        	  $(".userDetails").html(userResultHtml);
 	           },
@@ -110,8 +110,8 @@ $(document).ready(function() {
 
 	
 	$(document).on('click', '.viewDetails', function() {
-		var address = $(this).closest('tr').find('.address').text();
-		var phoneno = $(this).closest('tr').find('.phoneno').text()	
+		var address = $(this).closest('tbody').find('.address').val();
+		var phoneno = $(this).closest('tbody').find('.phoneno').val();	
 		var strVar="";
 		strVar += "<div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\" style=\"display: none;\">";
 		strVar += "	<div class=\"modal-dialog\">";
