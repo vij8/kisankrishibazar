@@ -11,7 +11,7 @@ public interface RetailerDAO
 {
     public Boolean registerNewUser(User user);
     
-    public List<UserWithItem> getOrderAvailable(String item , int quantity , float lat, float longitude);
+    public List<UserWithItem> getStock(String item , int quantity , float lat, float longitude);
     
     public OrderHistory getOrderHistory(String username);
     

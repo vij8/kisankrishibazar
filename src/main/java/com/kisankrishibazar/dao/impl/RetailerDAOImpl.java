@@ -66,7 +66,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<UserWithItem> getOrderAvailable(String item, int quantity,
+	public List<UserWithItem> getStock(String item, int quantity,
 			float lat, float longitude) {
 		List<UserWithItem> returnUserWithItem = new ArrayList<UserWithItem>();
 		String sql = "select  l.lat,l.longt,l.name,l.Address,l.Phone,o.username,o.quotedPrice ,o.Qty from OrderSuccesfulHistory os,Commodity c, OrderAvailable o ,login l where  c.id=o.id  and  l.username = o .userName and l.type='F' and o.username != os.FrmrUserName and c.English = ?";
