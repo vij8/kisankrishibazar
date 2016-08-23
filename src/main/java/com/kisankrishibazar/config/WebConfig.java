@@ -114,7 +114,7 @@ public class WebConfig {
 
 		get("/farmer/getOrderHistory", (req, res) -> {
 
-			return farmerDao.getOrderAvailable(req.queryParams("username"));
+			return farmerDao.getOrderAvailable(req.queryParams("Language"),req.queryParams("username"));
 		}, new JsonTransformer());
 
 		get("/farmer/deleteOrder",

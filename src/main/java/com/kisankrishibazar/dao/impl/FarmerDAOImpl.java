@@ -84,9 +84,9 @@ public class FarmerDAOImpl implements FarmerDAO {
 		}
 	}
 
-	public FarmerOrderAvailable getOrderAvailable(String username) {
-		String sql = "SELECT * FROM orderAvailable where UserName = ?";
-		return jdbcTemplate.queryForObject(sql, new Object[] { username },
+	public FarmerOrderAvailable getOrderAvailable(String languageReq,String username) {
+		String sql = "SELECT o.EstimatedPrice,o.OrderAvailableId,tr.? ,o.quotedPrice , o.Date, o.Qty FROM orderAvailable o,Translation tr,Commodity co where UserName = ? and o.id=co.id and co.English = tr.English";
+		return jdbcTemplate.queryForObject(sql, new Object[] { languageReq,username },
 				new OrderMapper());
 	}
 
