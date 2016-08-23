@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -98,4 +99,16 @@ public class FarmerDAOImpl implements FarmerDAO {
 			return farmerOrderAvailable;
 		}
 	}
+	@Override
+	public Map<String,String> getTranslation(String language) {
+		
+		String getTranslationQuery = "Select Label,"+language+ " from Translation";
+		List<Map<String, Object>> map = jdbcTemplate.queryForList(getTranslationQuery);
+		Map<String,String> newMap = new HashMap<String,String>();
+		for(Map row : map){
+			newMap.put((String) row.get("Label"),(String) row.get(language));
+			
+		}
+		return newMap;
+ 	}
 }

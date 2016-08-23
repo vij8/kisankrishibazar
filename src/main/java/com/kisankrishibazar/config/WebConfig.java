@@ -93,6 +93,11 @@ public class WebConfig
 				return "FAIL";
 			}   
 			}, new JsonTransformer());
+		
+		get("/farmer/translation", (req,res) -> {
+			return farmerDao.getTranslation(req.queryParams("Language"));
+			 
+		},new JsonTransformer());
 
 	}
 
