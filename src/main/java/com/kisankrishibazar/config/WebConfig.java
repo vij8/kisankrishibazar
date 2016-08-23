@@ -52,6 +52,31 @@ public class WebConfig
 	private void setupFarmerRoutes()
 	{
 
+		post("/farmer/login", (req, res) -> {
+
+			User user = new User();
+			try {
+				MultiMap<String> params = new MultiMap<String>();
+				UrlEncoded.decodeTo(req.body(), params, "UTF-8");
+				BeanUtils.populate(user, params);
+			}
+			catch (Exception e) {
+				halt(501);
+				return null;
+			}
+			User exisistinguser = getAuthenticatedUser(req);
+			if (exisistinguser == null) {
+				user = dao.getFarmerUserDetail(user.getUsername(), user.getPassword());
+				if (user != null) {
+					addAuthenticatedUser(req, user);
+				}
+			}
+			else {
+				user = exisistinguser;
+			}
+			return user;
+		}, new JsonTransformer());
+		
 		get("/farmer", (req, res) -> "hi I am farmer");
 
 		get("/farmer/getCommodity", (req, res) -> {

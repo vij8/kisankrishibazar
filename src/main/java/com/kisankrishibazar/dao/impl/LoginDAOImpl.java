@@ -24,11 +24,18 @@ public class LoginDAOImpl implements LoginDAO
 	@Override
 	public User getUserDetail(String userName, String Password)
 	{
-		String sql = "SELECT * FROM Login where UserName = ? AND Password = ?";
+		String sql = "SELECT * FROM Login where UserName = ? AND Password = ? AND Type='R' ";
 		return jdbcTemplate.queryForObject(sql, new Object[] { userName, Password }, new UserMapper());
 
 	}
 
+	public User getFarmerUserDetail(String userName, String Password)
+	{
+		String sql = "SELECT * FROM Login where UserName = ? AND Password = ? AND Type='F' ";
+		return jdbcTemplate.queryForObject(sql, new Object[] { userName, Password }, new UserMapper());
+
+	}
+	
 	public static final class UserMapper implements RowMapper<User>
 	{
 		@Override
@@ -40,7 +47,6 @@ public class LoginDAOImpl implements LoginDAO
 			customer.setLongt(rs.getDouble("Longt"));
 			customer.setLat(rs.getDouble("Lat"));
 			customer.setName(rs.getString("Name"));
-			customer.setPassword(rs.getString("Password"));
 			customer.setUsername(rs.getString("UserName"));
 			customer.setType(rs.getString("Type"));
 			return customer;

@@ -1,5 +1,6 @@
 $(document).ready(function() {
 	var response="";
+	var jsonResponse="";
 	$.ajax({
         url: '/retailer/getCommodity',
         type: 'get',
@@ -50,8 +51,14 @@ $(document).ready(function() {
 					longt : longt
 				},
 	           success: function( data, textStatus, jQxhr ){
-	        	  $(".orderTable").removeClass('hide');	
-	              alert("test");
+	        	  $(".orderTable").removeClass('hide');
+	        	  jsonResponse = $.parseJSON(data);
+	        	  for(i=0; i<jsonResponse.length; i=i+1){
+	        		  
+	        	  }
+	        	  $("#name").val(jsonResponse.username);
+	        	  $("#qty").val(jsonResponse.quantity);
+	        	  $("#frmrPrice").val(jsonResponse.price);
 	           },
 	           error: function( jqXhr, textStatus, errorThrown ){
 	               console.log( errorThrown );
@@ -100,8 +107,8 @@ $(document).ready(function() {
 		strVar += "				<h4 class=\"modal-title\" id=\"myModalLabel\">Farmer Detail<\/h4>";
 		strVar += "			<\/div>";
 		strVar += "			<div class=\"modal-body\">";
-		strVar += "					Phone : 9575934  <br\/>";
-		strVar += "					Address : dbdfjs<br\/>";
+		strVar += "					Phone :"+jsonResponse.phone +"<br\/>";
+		strVar += "					Address :" +jsonResponse.address +"<br\/>";
 		strVar += "             <\/div>";
 		strVar += "			<div class=\"modal-footer\">";
 		strVar += "				<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close<\/button>";			

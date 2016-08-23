@@ -1,7 +1,9 @@
 package com.kisankrishibazar.model;
 
-public class UserWithItem {
+import com.google.gson.annotations.Expose;
 
+public class UserWithItem {
+	@Expose
 	private String username;
 
 	private float lat;
@@ -23,13 +25,13 @@ public class UserWithItem {
 	public void setLongt(float longt) {
 		this.longt = longt;
 	}
-
+    @Expose
 	private String name;
-
+    @Expose
 	private String address;
-
+    @Expose
 	private String phone;
-	
+    @Expose
 	private Double distance;
 
 	public Double getDistance() {
@@ -88,9 +90,9 @@ public class UserWithItem {
 	public void setQuantity(int quantity) {
 		this.quantity = quantity;
 	}
-
+	@Expose
 	private float price;
-
+	 @Expose
 	private int quantity;
 
 }
