@@ -56,6 +56,7 @@ $(document).ready(function() {
 					price : price
 				},
 	           success: function( data, textStatus, jQxhr ){
+	        	   obj.closest('tr').find('.viewDetails').removeClass('disabled');   
 	             var response = $.parseJSON(data);
 	             if(response == "PASS"){
 	            	 obj.addClass("disabled");
@@ -97,12 +98,12 @@ $(document).ready(function() {
 	        		  userResultHtml+="<td>";
 	        		  userResultHtml+="   <button class='btn btn-xs btn-danger markInterested'>Mark Interested</button>";
 	        		  userResultHtml+=" </td>";
-	        		  userResultHtml+="<td> <button class='btn btn-xs btn-danger viewDetails'>View</button> </td>";
+	        		  userResultHtml+="<td> <button class='btn btn-xs btn-danger viewDetails disabled'>View</button> </td>";
 	        		  userResultHtml+=" <td>"
-		        		  userResultHtml+=" <label class='label label-info distance' >"+jsonResponse[i].distance.toFixed(2)+" km</label>";
-			        	  userResultHtml+="</td></tr> ";
+		              userResultHtml+=" <label class='label label-info distance' >"+jsonResponse[i].distance.toFixed(2)+" km</label></td>";
+	        		  userResultHtml+="<td class='hide userDetailsPop'>"
 	        		  userResultHtml+="<input type='hidden' class='address' value='" +jsonResponse[i].address+"'></input>";
-	        		  userResultHtml+="<input type='hidden' class='phoneno' value='"+jsonResponse[i].phone+"'></input>";
+	        		  userResultHtml+="<input type='hidden' class='phoneno' value='"+jsonResponse[i].phone+"'></input></td></tr>";
 	        	  }
 	        	  $(".userDetails").html(userResultHtml);
 	           },
@@ -115,8 +116,8 @@ $(document).ready(function() {
 
 	
 	$(document).on('click', '.viewDetails', function() {
-		var address = $(this).closest('tbody').find('.address').val();
-		var phoneno = $(this).closest('tbody').find('.phoneno').val();	
+		var address = $(this).closest('tr').find('.userDetailsPop .address').val();
+		var phoneno = $(this).closest('tr').find('.userDetailsPop .phoneno').val();	
 		var strVar="";
 		strVar += "<div class=\"modal fade\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"true\" style=\"display: none;\">";
 		strVar += "	<div class=\"modal-dialog\">";
