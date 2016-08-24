@@ -127,8 +127,8 @@ $(document).ready(function() {
 		strVar += "				<h4 class=\"modal-title\" id=\"myModalLabel\">Farmer Detail<\/h4>";
 		strVar += "			<\/div>";
 		strVar += "			<div class=\"modal-body\">";
-		strVar += "					Phone :"+phoneno +"<br\/>";
-		strVar += "					Address :" +address +"<br\/>";
+		strVar += "					Phone : "+phoneno +"<br\/>";
+		strVar += "					Address : " +address +"<br\/>";
 		strVar += "             <\/div>";
 		strVar += "			<div class=\"modal-footer\">";
 		strVar += "				<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close<\/button>";			

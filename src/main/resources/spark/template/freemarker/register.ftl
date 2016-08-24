@@ -27,9 +27,9 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <strong>Email: </strong>hackathon@accenture.com
+                    <strong>Email: </strong>shamim.khan@accenture.com
                     &nbsp;&nbsp;
-                    <strong>Support: </strong>+Better-Call-Saul
+                    <strong>Support: </strong>9004664432
                 </div>
 
             </div>
@@ -52,7 +52,7 @@
             </div>
 
             <div class="left-div">
-                <i class="fa fa-user-plus login-icon" ></i>
+              
         </div>
             </div>
         </div>
@@ -66,7 +66,8 @@
                     <h4 class="page-head-line">Please fill Registration form  </h4>
 
                 </div>
-
+                 <img id="loading-image" src="assets/img/logo.png" />
+			<!--<div id="loading-image" src="/assets/img/ajax-loader.gif" ></div>-->
             </div>
             <div class="row">
                 
@@ -118,7 +119,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    &copy; 2016 MegaHackthon | By : <a href="" target="_blank">MegaHackathon</a>
+                    &copy; 2016 MegaHackthon | By : <a href="" target="_blank">MegaHackathon Coders</a>
                 </div>
 
             </div>

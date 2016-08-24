@@ -9,7 +9,7 @@
     <!--[if IE]>
       <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
       <![endif]-->
-    <title>Kisan Krishi Bazaaar</title>
+    <title>Kisaan Krishi Bazaaar</title>
     <!-- BOOTSTRAP CORE STYLE  -->
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
     <!-- FONT AWESOME ICONS  -->
@@ -46,27 +46,7 @@
                 </button>
             </div>
             <div class="left-div">
-                <div class="user-settings-wrapper">
-                    <ul class="nav">
-                        <li class="dropdown">
-                            <div class="dropdown-menu dropdown-settings">
-                                <div class="media">
-                                    <a class="media-left" href="#">
-                                        <img src="assets/img/64-64.jpg" alt="" class="img-rounded" />
-                                    </a>
-                                    <div class="media-body">
-                                        <h4 class="media-heading">Jhon Deo Alex </h4>
-                                        <h5>Developer & Designer</h5>
-                                    </div>
-                                </div>
-                                <hr />
-                                <h5><strong>Personal Bio : </strong></h5> Anim pariatur cliche reprehen derit.
-                                <hr />
-                                <a href="#" class="btn btn-info btn-sm">Full Profile</a>&nbsp; <a href="login.html" class="btn btn-danger btn-sm">Logout</a>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
+            	<h1 class="h1_heading">Kisaan Krishi Bazar</h1>
             </div>
         </div>
     </div>
@@ -154,7 +134,7 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            &copy; 2015 YourCompany | By : <a href="http://www.designbootstrap.com/" target="_blank">DesignBootstrap</a>
+                            &copy; 2015 Hackathon | By : <a href="http://www.designbootstrap.com/" target="_blank">HackathonGroup</a>
                         </div>
                     </div>
                 </div>

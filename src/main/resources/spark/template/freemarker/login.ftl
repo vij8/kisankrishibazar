@@ -8,7 +8,7 @@
     <!--[if IE]>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
         <![endif]-->
-    <title>KISAN KRISHI BAZAR</title>
+    <title>KISAAN KRISHI BAZAR</title>
     <!-- BOOTSTRAP CORE STYLE  -->
     <link href="assets/css/bootstrap.css" rel="stylesheet" />
     <!-- FONT AWESOME ICONS  -->
@@ -27,7 +27,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <strong>Email: </strong>hackathon@accenture.com
+                    <strong>Email: </strong>vijeth.a.hegde@accenture.com
                     &nbsp;&nbsp;
                     <strong>Support: </strong>9773000846
                 </div>
@@ -46,7 +46,7 @@
                 </button>
                 <a class="navbar-brand" href="/retailer/home">
 
-                    <strong>Kisan Krishi Bazar</strong>
+                    <strong>Kisaan Krishi Bazar</strong>
                 </a>
 
             </div>
@@ -88,7 +88,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    &copy; 2016 MegaHackthon | By : <a href="" target="_blank">MegaHackathon</a>
+                    &copy; 2016 MegaHackthon | By : <a href="" target="_blank">MegaHackathon Coders</a>
                 </div>
 
             </div>
