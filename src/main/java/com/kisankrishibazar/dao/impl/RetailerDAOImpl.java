@@ -68,8 +68,8 @@ public class RetailerDAOImpl implements RetailerDAO {
 	}
 
 	@SuppressWarnings("unchecked")
-	public List<UserWithItem> getStock(String item, int quantity,
-			float lat, float longitude) {
+	public List<UserWithItem> getStock(String item, int quantity, float lat,
+			float longitude) {
 		List<UserWithItem> returnUserWithItem = new ArrayList<UserWithItem>();
 		String sql = "select l.lat,l.longt,l.name,l.Address,l.Phone, o.username,o.quotedPrice,o.Qty from Commodity c, OrderAvailable o LEFT JOIN OrderSuccesfulHistory os ON( o.username != os.FrmrUserName) , login l where c.id=o.id and l.type='F' and l.username = o .userName  and  c.English = ?";
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql,
@@ -79,7 +79,8 @@ public class RetailerDAOImpl implements RetailerDAO {
 			UserWithItem userwithitem = new UserWithItem();
 			userwithitem.setAddress((String) row.get("Address"));
 			userwithitem.setQuantity((int) row.get("Qty"));
-			if (null != row.get("quotedPrice")) userwithitem.setPrice((float) row.get("quotedPrice"));
+			if (null != row.get("quotedPrice"))
+				userwithitem.setPrice((float) row.get("quotedPrice"));
 			userwithitem.setLat((float) row.get("Lat"));
 			userwithitem.setLongt((float) row.get("Longt"));
 			userwithitem.setName((String) row.get("Name"));
@@ -130,8 +131,8 @@ public class RetailerDAOImpl implements RetailerDAO {
 			final double latnode, final double lonreq, final double lonnode,
 			UserWithItem userinfo) {
 		if ((latnode != 0.0) && (lonnode != 0.0)) {
-			final double R = 6372.8; // In kilometers chane
-			final double Miles = 0.621371;
+			final double R = 6372.8; // In kilometers
+			// final double Miles = 0.621371;
 			double lat1 = latreq;
 			final double lon1 = lonreq;
 			double lat2 = latnode;
@@ -147,7 +148,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 			final double c = 2 * Math.asin(Math.sqrt(a));
 
 			if ((latreq != 0.0) && (lonreq != 0.0)) {
-				userinfo.setDistance(R * c * Miles);
+				userinfo.setDistance(R * c);
 			}
 
 		}
@@ -158,13 +159,14 @@ public class RetailerDAOImpl implements RetailerDAO {
 
 		List<OrderHistory> returnRetailerHistory = new ArrayList<OrderHistory>();
 		String sql = "Select * from orderSuccesfulHistory where retailerUserName=?";
-		List<Map<String, Object>>  map = jdbcTemplate.queryForList(sql,new Object[] {username});
-		for(Map row : map){
+		List<Map<String, Object>> map = jdbcTemplate.queryForList(sql,
+				new Object[] { username });
+		for (Map row : map) {
 			OrderHistory orderHistory = new OrderHistory();
-			orderHistory.setDate((Date)row.get("Date"));
-			orderHistory.setFrmrusername((String)row.get("FrmrUserName"));
-			orderHistory.setPrice((float)row.get("Price"));
-			orderHistory.setQty((int)row.get("Qty"));
+			orderHistory.setDate((Date) row.get("Date"));
+			orderHistory.setFrmrusername((String) row.get("FrmrUserName"));
+			orderHistory.setPrice((float) row.get("Price"));
+			orderHistory.setQty((int) row.get("Qty"));
 			returnRetailerHistory.add(orderHistory);
 		}
 		return returnRetailerHistory;

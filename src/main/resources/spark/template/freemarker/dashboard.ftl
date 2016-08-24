@@ -136,12 +136,10 @@
                                     <th>Farmer Price</th>                                    
                                     <th>Mark Intrested</th>
                                     <th>View Details</th>
-                                    <th>Distance(in Miles)</th>
+                                    <th>Distance</th>
                                 </tr>
                             </thead>
                             <tbody class="userDetails">
-                               
-                              
                             </tbody>
                         </table>
                     </div>

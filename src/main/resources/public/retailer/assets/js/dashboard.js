@@ -94,14 +94,13 @@ $(document).ready(function() {
 	        		  userResultHtml+=" <td>"
 	        		  userResultHtml+=" <label class='label label-info frmrPrice' >"+jsonResponse[i].price+"</label>";
 	        		  userResultHtml+="</td>";
-	        		  userResultHtml+=" <td>"
-	        		  userResultHtml+=" <label class='label label-info distance' >"+jsonResponse[i].distance+"</label>";
-		        	  userResultHtml+="</td>";
 	        		  userResultHtml+="<td>";
 	        		  userResultHtml+="   <button class='btn btn-xs btn-danger markInterested'>Mark Interested</button>";
 	        		  userResultHtml+=" </td>";
-	        		  userResultHtml+=" <td>01/25/2015</td>";
-	        		  userResultHtml+="<td> <button class='btn btn-xs btn-danger viewDetails'>View</button> </td></tr> ";
+	        		  userResultHtml+="<td> <button class='btn btn-xs btn-danger viewDetails'>View</button> </td>";
+	        		  userResultHtml+=" <td>"
+		        		  userResultHtml+=" <label class='label label-info distance' >"+jsonResponse[i].distance.toFixed(2)+" km</label>";
+			        	  userResultHtml+="</td></tr> ";
 	        		  userResultHtml+="<input type='hidden' class='address' value='" +jsonResponse[i].address+"'></input>";
 	        		  userResultHtml+="<input type='hidden' class='phoneno' value='"+jsonResponse[i].phone+"'></input>";
 	        	  }
