@@ -97,7 +97,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 		Double quantitySum = 0.0;
 		List<UserWithItem> returnSortedUserWithItem = new ArrayList<UserWithItem>();
 		for (UserWithItem returnUserWithItemEntry : returnUserWithItem) {
-			if (quantitySum < quantity) {
+			if (quantitySum < quantity*1.5) {
 				quantitySum = quantitySum
 						+ returnUserWithItemEntry.getQuantity();
 				returnSortedUserWithItem.add(returnUserWithItemEntry);
