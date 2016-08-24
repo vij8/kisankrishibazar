@@ -1,5 +1,6 @@
 package com.kisankrishibazar.dao.impl;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -84,27 +85,26 @@ public class FarmerDAOImpl implements FarmerDAO {
 		}
 	}
 
-	public FarmerOrderAvailable getOrderAvailable(String languageReq,String username) {
-		String sql = "SELECT o.EstimatedPrice,o.OrderAvailableId,tr.? ,o.quotedPrice , o.Date, o.Qty FROM orderAvailable o,Translation tr,Commodity co where UserName = ? and o.id=co.id and co.English = tr.English";
-		return jdbcTemplate.queryForObject(sql, new Object[] { languageReq,username },
-				new OrderMapper());
-	}
-
-	public static final class OrderMapper implements
-			RowMapper<FarmerOrderAvailable> {
-		@Override
-		public FarmerOrderAvailable mapRow(ResultSet rs, int rowNum)
-				throws SQLException {
+	public List<FarmerOrderAvailable> getOrderAvailable(String languageReq,
+			String username) {
+		String getOrderQuery = "SELECT o.EstimatedPrice,o.OrderAvailableId,tr.? ,o.quotedPrice , o.Date, o.Qty FROM orderAvailable o,Translation tr,Commodity co where UserName = ? and o.id=co.id and co.English = tr.English";
+		// return jdbcTemplate.queryForObject(sql, new Object[] {
+		// languageReq,username },
+		// new OrderMapper());
+		List<FarmerOrderAvailable> returnFarmerOrderAvailable = new ArrayList<FarmerOrderAvailable>();
+		List<Map<String, Object>> rows = jdbcTemplate
+				.queryForList(getOrderQuery);
+		for(Map row :rows){
 			FarmerOrderAvailable farmerOrderAvailable = new FarmerOrderAvailable();
-			farmerOrderAvailable.setOrderId(rs.getInt("OrderAvailableId"));
-			farmerOrderAvailable.setEstimatedprice(rs
-					.getFloat("estimatedPrice"));
-			farmerOrderAvailable.setQuotedprice(rs.getFloat("quotedPrice"));
-			farmerOrderAvailable.setDate(rs.getDate("date"));
-			farmerOrderAvailable.setQty(rs.getInt("Qty"));
-			farmerOrderAvailable.setId(rs.getInt("id"));
-			return farmerOrderAvailable;
+			farmerOrderAvailable.setOrderId((int) row.get("orderId"));
+			farmerOrderAvailable.setEstimatedprice((float) row.get("estimatedprice"));
+			farmerOrderAvailable.setQuotedprice((float) row.get("quotedprice"));
+			farmerOrderAvailable.setDate((Date) row.get("date"));
+			farmerOrderAvailable.setQty((int) row.get("qty"));
+			farmerOrderAvailable.setId((int) row.get("id"));
+			returnFarmerOrderAvailable.add(farmerOrderAvailable);
 		}
+		return null;
 	}
 
 	@Override

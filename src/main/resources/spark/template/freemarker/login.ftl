@@ -29,7 +29,7 @@
                 <div class="col-md-12">
                     <strong>Email: </strong>hackathon@accenture.com
                     &nbsp;&nbsp;
-                    <strong>Support: </strong>+Better-Call-Saul
+                    <strong>Support: </strong>9773000846
                 </div>
 
             </div>

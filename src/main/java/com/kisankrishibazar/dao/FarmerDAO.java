@@ -14,7 +14,7 @@ public interface FarmerDAO {
 
 	boolean insertOrderAvailable(FarmerOrderInsert farmerOrderInsert);
 
-	FarmerOrderAvailable getOrderAvailable(String languageReq,String username);
+	List<FarmerOrderAvailable> getOrderAvailable(String languageReq,String username);
 
 	Map<String, String> getTranslation(String language);
 
