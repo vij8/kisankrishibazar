@@ -5,6 +5,15 @@ body {
     line-height: 30px;
 }
 
+.page-head-line1 {
+    font-weight: 900;
+    padding-bottom: 20px;
+    text-transform: uppercase;
+    color: #F0677C;
+    font-size: 20px;
+    margin-bottom: 40px;
+}
+
 .set-radius-zero {
     border-radius: 0px;
     -moz-border-radius: 0px;

@@ -61,7 +61,9 @@
             <div class="row">
                 <div class="col-md-12">
                     <h4 class="page-head-line">Please Login with Kisan Krishi Account</h4>
-
+                </div>
+                <div class="errorMessage">
+                  <h4 class="page-head-line1">Please Enter correct username and password</h4>
                 </div>
 
             </div>

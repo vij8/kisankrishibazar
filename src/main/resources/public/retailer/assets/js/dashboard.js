@@ -41,7 +41,7 @@ $(document).ready(function() {
 	       var details = $.parseJSON(localStorage.getItem('userdetail'));
 	       var response = $.parseJSON(details);
 	       var retailerusername = response.username;
-	       var frmrusername = $(this).closest('tr').find('.name').text();
+	       var frmrusername = $(this).closest('tr').find('.userDetailsPop .username').val();
 	       var qty = $(this).closest('tr').find('.quantity').text();
 	       var price = $(this).closest('tr').find('.frmrPrice').text();
 	       $.ajax({
@@ -85,9 +85,11 @@ $(document).ready(function() {
 					lat : lat,
 					longt : longt
 				},
-	           success: function( data, textStatus, jQxhr ){
-	        	  $(".orderTable").removeClass('hide');
+	           success: function( data, textStatus, jQxhr ){	        	  
 	        	  jsonResponse = $.parseJSON(data);
+	        	  if(jsonResponse.length > 0){
+	        		  $(".orderTable").removeClass('hide');
+	        	  }
 	        	  var userResultHtml = "";
 	        	  for(i=0; i<jsonResponse.length; i++){
 	        		  userResultHtml += "<tr> <td class='name'>"+jsonResponse[i].name+"</td> "
@@ -103,6 +105,7 @@ $(document).ready(function() {
 		              userResultHtml+=" <label class='label label-info distance' >"+jsonResponse[i].distance.toFixed(2)+" km</label></td>";
 	        		  userResultHtml+="<td class='hide userDetailsPop'>"
 	        		  userResultHtml+="<input type='hidden' class='address' value='" +jsonResponse[i].address+"'></input>";
+	        		  userResultHtml+="<input type='hidden' class='username' value='" +jsonResponse[i].username+"'></input>";
 	        		  userResultHtml+="<input type='hidden' class='phoneno' value='"+jsonResponse[i].phone+"'></input></td></tr>";
 	        	  }
 	        	  $(".userDetails").html(userResultHtml);

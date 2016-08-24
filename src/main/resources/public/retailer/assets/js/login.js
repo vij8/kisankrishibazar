@@ -1,4 +1,5 @@
 $(document).ready(function() {
+	$(".errorMessage").addClass('hide');
 	$("#login").click(function() {
 		var id = $("#username").val();
 		var password = $("#password").val();
@@ -12,6 +13,7 @@ $(document).ready(function() {
 			},
 			success : function(data, textStatus, jQxhr) {
 				if (typeof (Storage) !== "undefined") {
+					$(".errorMessage").addClass('hide');
 					localStorage.setItem('userdetail', JSON.stringify(data));
 					window.location.href = '/retailer/dashboard';
 				} else {
@@ -20,7 +22,7 @@ $(document).ready(function() {
 
 			},
 			error : function(jqXhr, textStatus, errorThrown) {
-				alert("Please enter correct credentials.");
+				$(".errorMessage").removeClass('hide');
 				console.log(errorThrown);
 			}
 		});
