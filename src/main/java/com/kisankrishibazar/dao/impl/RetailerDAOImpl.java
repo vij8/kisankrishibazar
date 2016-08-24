@@ -71,7 +71,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 	public List<UserWithItem> getStock(String item, int quantity,
 			float lat, float longitude) {
 		List<UserWithItem> returnUserWithItem = new ArrayList<UserWithItem>();
-		String sql = "select  l.lat,l.longt,l.name,l.Address,l.Phone,o.username,o.quotedPrice ,o.Qty from OrderSuccesfulHistory os,Commodity c, OrderAvailable o ,login l where  c.id=o.id  and  l.username = o .userName and l.type='F' and o.username != os.FrmrUserName and c.English = ?";
+		String sql = "select l.lat,l.longt,l.name,l.Address,l.Phone, o.username,o.quotedPrice,o.Qty from Commodity c, OrderAvailable o LEFT JOIN OrderSuccesfulHistory os ON( o.username != os.FrmrUserName) , login l where c.id=o.id and l.type='F' and l.username = o .userName  and  c.English = ?";
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql,
 				new Object[] { item });
 

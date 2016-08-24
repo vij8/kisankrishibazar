@@ -94,6 +94,9 @@ $(document).ready(function() {
 	        		  userResultHtml+=" <td>"
 	        		  userResultHtml+=" <label class='label label-info frmrPrice' >"+jsonResponse[i].price+"</label>";
 	        		  userResultHtml+="</td>";
+	        		  userResultHtml+=" <td>"
+	        		  userResultHtml+=" <label class='label label-info distance' >"+jsonResponse[i].distance+"</label>";
+		        	  userResultHtml+="</td>";
 	        		  userResultHtml+="<td>";
 	        		  userResultHtml+="   <button class='btn btn-xs btn-danger markInterested'>Mark Interested</button>";
 	        		  userResultHtml+=" </td>";
