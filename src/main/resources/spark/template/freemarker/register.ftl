@@ -98,7 +98,7 @@
                                         </div>
                                         <div class="form-group has-success">
                                             <label class="control-label" for="error">PHONE NUMBER</label>
-                                            <input name="phone "type="text"  placeholder="Phone Number" class="form-control" id="error">
+                                            <input name="phone" type="text"  placeholder="Phone Number" class="form-control" id="error">
                                         </div>
                                          <hr>
                            			<a id="register" href="#" class="btn btn-success btn-sm">register me</a>

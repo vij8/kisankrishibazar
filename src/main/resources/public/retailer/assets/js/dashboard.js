@@ -58,7 +58,6 @@ $(document).ready(function() {
 	           success: function( data, textStatus, jQxhr ){
 	             var response = $.parseJSON(data);
 	             if(response == "PASS"){
-	            	 alert(obj.text());
 	            	 obj.addClass("disabled");
 	             }
 	           },
