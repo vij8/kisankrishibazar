@@ -87,7 +87,7 @@ public class FarmerDAOImpl implements FarmerDAO {
 
 	public List<FarmerOrderAvailable> getOrderAvailable(String languageReq,
 			String username) {
-		String getOrderQuery = "SELECT o.EstimatedPrice,o.OrderAvailableId,tr.? ,o.quotedPrice , o.Date, o.Qty FROM orderAvailable o,Translation tr,Commodity co where UserName = ? and o.id=co.id and co.English = tr.English";
+		String getOrderQuery = "SELECT o.EstimatedPrice,o.OrderAvailableId,tr."+languageReq+ ",o.quotedPrice , o.Date, o.Qty FROM orderAvailable o,Translation tr,Commodity co where UserName ='"+username+ "' and o.id=co.id and co.English = tr.English";
 		// return jdbcTemplate.queryForObject(sql, new Object[] {
 		// languageReq,username },
 		// new OrderMapper());
@@ -96,15 +96,15 @@ public class FarmerDAOImpl implements FarmerDAO {
 				.queryForList(getOrderQuery);
 		for(Map row :rows){
 			FarmerOrderAvailable farmerOrderAvailable = new FarmerOrderAvailable();
-			farmerOrderAvailable.setOrderId((int) row.get("orderId"));
+			farmerOrderAvailable.setOrderId((int) row.get("orderAvailableId"));
 			farmerOrderAvailable.setEstimatedprice((float) row.get("estimatedprice"));
 			farmerOrderAvailable.setQuotedprice((float) row.get("quotedprice"));
 			farmerOrderAvailable.setDate((Date) row.get("date"));
 			farmerOrderAvailable.setQty((int) row.get("qty"));
-			farmerOrderAvailable.setId((int) row.get("id"));
+			farmerOrderAvailable.setItem((String) row.get(languageReq));
 			returnFarmerOrderAvailable.add(farmerOrderAvailable);
 		}
-		return null;
+		return returnFarmerOrderAvailable;
 	}
 
 	@Override

@@ -6,8 +6,16 @@ public class FarmerOrderAvailable {
 	
 	int orderId;
 	
-	int id;
+	String item ;
 	
+	public String getItem() {
+		return item;
+	}
+
+	public void setItem(String item) {
+		this.item = item;
+	}
+
 	float estimatedprice;
 	
 	float quotedprice;
@@ -22,14 +30,6 @@ public class FarmerOrderAvailable {
 
 	public void setOrderId(int orderId) {
 		this.orderId = orderId;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
 	}
 
 	public float getEstimatedprice() {
