@@ -1,4 +1,4 @@
-﻿
+
 /*=============================================================
     Authour URL: www.designbootstrap.com
     
@@ -311,4 +311,18 @@ footer {
 
 .btn-google {
     background-color: #c32f10;
+}
+
+
+
+/*New CSS*/
+.navbar-brand {float: none;}
+.navbar-brand strong{
+	color: #5a5b5c;
+    font-size: 22px;
+}
+.navbar-header{
+	float: none;
+	margin-top: 12px;
+    text-align: center;
 }

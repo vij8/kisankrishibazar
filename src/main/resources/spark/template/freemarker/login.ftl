@@ -51,9 +51,6 @@
 
             </div>
 
-            <div class="left-div">
-                <i class="fa fa-user-plus login-icon" ></i>
-        </div>
             </div>
         </div>
     <!-- LOGO HEADER END-->
@@ -63,14 +60,14 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h4 class="page-head-line">Please Login To Enter </h4>
+                    <h4 class="page-head-line">Please Login with Kisan Krishi Account</h4>
 
                 </div>
 
             </div>
             <div class="row">
                 <div class="col-md-6">                 
-                     <h4> Or Login with <strong>Kisan Krishi Account :</strong></h4>
+                  
                     <br />
                      <label>Enter User ID : </label>
                         <input id = "username" type="text" class="form-control" />
