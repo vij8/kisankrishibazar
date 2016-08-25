@@ -128,7 +128,7 @@ $(document).ready(function() {
 	        		  userResultHtml+="   <button class='btn btn-xs btn-danger markInterested'>Mark Interested</button>";
 	        		  userResultHtml+=" </td>";
 	        		  userResultHtml+="<td>";
-	        		  userResultHtml+="   <button class='btn btn-xs btn-danger markInterested'>Negotiate</button>";
+	        		  userResultHtml+="   <button class='btn btn-xs btn-danger negotiate'>Negotiate</button>";
 	        		  userResultHtml+=" </td>";
 	        		  userResultHtml+="<td> <button class='btn btn-xs btn-danger viewDetails disabled'>View</button> </td>";
 	        		  userResultHtml+=" <td>"
@@ -137,6 +137,7 @@ $(document).ready(function() {
 	        		  userResultHtml+="<input type='hidden' class='address' value='" +jsonResponse[i].address+"'></input>";
 	        		  userResultHtml+="<input type='hidden' class='username' value='" +jsonResponse[i].username+"'></input>";
 	        		  userResultHtml+="<input type='hidden' class='orderAvailableId' value='" +jsonResponse[i].orderAvailableId+"'></input>";
+	        		  userResultHtml+="<input type='hidden' class='quotedPrice' value='" +jsonResponse[i].orderAvailableId+"'></input>";
 	        		  userResultHtml+="<input type='hidden' class='phoneno' value='"+jsonResponse[i].phone+"'></input></td></tr>";
 	        	  }
 	        	  $(".userDetails").html(userResultHtml);
@@ -177,10 +178,78 @@ $(document).ready(function() {
 		$("#mymodal").html(strVar);
 		$('#myModal').modal('show'); 
 		
+		
+		
 	}); 
+	$(document).on('click', '.negotiate', function() {		
+		
+		var orderAvailableId = $(this).closest('tr').find('.userDetailsPop .orderAvailableId').val();
+		var quotedPrice = $(this).closest('tr').find('.userDetailsPop .quotedPrice').val();
+		var  estimatedPrice  = $("#qtyPrice").text(); 
+		var farmerUserName = 	$(this).closest('tr').find('.userDetailsPop .username').val();					
+		 var details = $.parseJSON(localStorage.getItem('userdetail'));
+	       var response = $.parseJSON(details);
+	       var retailerusername = response.username;
+		var item= $("#products option:selected").text() ;
+				
+		
+		
+		var strVar="";
+		strVar += "<div class=\"modal fade in\" id=\"myModal\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\" aria-hidden=\"false\" style=\"display: block;\">";
+		strVar += "                                <div class=\"modal-dialog\">";
+		strVar += "                                    <div class=\"modal-content\">";
+		strVar += "                                        <div class=\"modal-header\">";
+		strVar += "                                            <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-hidden=\"true\">×<\/button>";
+		strVar += "                                            <h4 class=\"modal-title\" id=\"myModalLabel\">Negotiate Value<\/h4>";
+		strVar += "                                        <\/div>";
+		strVar += "                                        <div class=\"modal-body\">";
+		strVar += "                                             <label>Enter New Value: <\/label>";		
+		strVar += "                       			 <input id = \"negotiationPrice\" type=\"text\" class=\"form-control\">";
+		strVar += "                                        <\/div>";
+		strVar += "                                        <div class=\"modal-footer\">";		
+		strVar += "				<button type=\"button\" class=\"btn btn-default\" data-dismiss=\"modal\">Close<\/button>";
+		strVar += "<button type=\"button\" class=\"btn btn-primary\" onclick = \"saveNegotiation( "+ orderAvailableId +"," +quotedPrice+"," +estimatedPrice+",'" +farmerUserName+"','" +item + "')\">Save changes<\/button>";
+		strVar += "                                        <\/div>";
+		strVar += "                                    <\/div>";
+		strVar += "                                <\/div>";
+		strVar += "                            <\/div>";
+
+			$("#mymodal").html(strVar);
+			$('#myModal').modal('show'); 			
+			
+				
+	});
+	
+	
+	
+	
+	
 	
 });
 
+
+function saveNegotiation(orderAvailableId,quotedPrice,estimatedPrice,farmerUserName,item){
+	$.ajax({
+		url : '/retailer/saveNegotiationDetails',
+		type : 'get',		
+		data : {
+			orderAvailableId:orderAvailableId,
+			quotedPrice : quotedPrice,
+			estimatedPrice : estimatedPrice,
+			farmerUserName : farmerUserName,
+			item : item
+		},
+		success : function(data, textStatus, jQxhr) {				
+			$('#modal').modal('toggle');
+
+		},
+		error : function(jqXhr, textStatus, errorThrown) {
+			console.log(errorThrown);	
+		}
+	
+
+});
+}
 
 
 

@@ -22,6 +22,7 @@ import com.kisankrishibazar.dao.LoginDAO;
 import com.kisankrishibazar.dao.RetailerDAO;
 import com.kisankrishibazar.model.FarmerOrderInsert;
 import com.kisankrishibazar.model.JsonTransformer;
+import com.kisankrishibazar.model.NegotiationDetails;
 import com.kisankrishibazar.model.OrderAvailable;
 import com.kisankrishibazar.model.OrderHistory;
 import com.kisankrishibazar.model.User;
@@ -113,10 +114,29 @@ public class WebConfig
 
 			return farmerDao.getOrderAvailable(req.queryParams("Language"), req.queryParams("username"));
 		}, new JsonTransformer());
+		
+		get("/farmer/readNegotiation", (req, res) -> {
+
+			return farmerDao.getNegotiationDetails(req.queryParams("username"),req.queryParams("Language"));
+		}, new JsonTransformer());
+		
+		get("/farmer/getNegotiationCount", (req, res) -> {
+			return farmerDao.getNegotiateCount(req.queryParams("username"));
+		}, new JsonTransformer());
 
 		get("/farmer/deleteOrder", (req, res) -> {
 			boolean deleteOrder = farmerDao.deleteOrder(Integer.parseInt(req.queryParams("orderId")));
 			if (deleteOrder) {
+				return "PASS";
+			}
+			else {
+				return "FAIL";
+			}
+		}, new JsonTransformer());
+		
+		get("/farmer/deleteNegotiateDetails", (req, res) -> {
+			boolean deleteNegotiateOrder = farmerDao.updateNegotiateOrder(Integer.parseInt(req.queryParams("orderAvailableId")),req.queryParams("status"),Integer.parseInt(req.queryParams("negotiatedPrice")));
+			if (deleteNegotiateOrder) {
 				return "PASS";
 			}
 			else {
@@ -260,6 +280,26 @@ public class WebConfig
 			}
 			Boolean saveOrder = retailerDao.saveOrderHistory(orderHistory);
 			if (saveOrder) {
+				return "PASS";
+			}
+			else {
+				return "FAIL";
+			}
+		}, new JsonTransformer());
+		
+		get("/retailer/saveNegotiationDetails", (req, res) -> {
+			NegotiationDetails negotiationDetails = new NegotiationDetails();
+			try {
+				MultiMap<String> params = new MultiMap<String>();
+				UrlEncoded.decodeTo(req.queryString(), params, "UTF-8");
+				BeanUtils.populate(negotiationDetails, params);
+			}
+			catch (Exception e) {
+				halt(501);
+				return null;
+			}
+			Boolean saveNegotiationDetails = retailerDao.saveNegotiationDetails(negotiationDetails);
+			if (saveNegotiationDetails) {
 				return "PASS";
 			}
 			else {

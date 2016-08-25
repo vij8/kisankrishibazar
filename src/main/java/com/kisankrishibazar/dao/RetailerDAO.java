@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.kisankrishibazar.model.CommodityListBean;
+import com.kisankrishibazar.model.NegotiationDetails;
 import com.kisankrishibazar.model.OrderHistory;
 import com.kisankrishibazar.model.User;
 import com.kisankrishibazar.model.UserWithItem;
@@ -21,5 +22,7 @@ public interface RetailerDAO
     public List<CommodityListBean> getCommodityList();
     
     public Boolean saveOrderHistory(OrderHistory orderHistory);
+    
+    public Boolean saveNegotiationDetails(NegotiationDetails negotiationDetails);
 	
 }

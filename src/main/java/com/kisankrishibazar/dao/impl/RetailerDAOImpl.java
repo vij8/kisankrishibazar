@@ -19,6 +19,7 @@ import org.springframework.stereotype.Repository;
 
 import com.kisankrishibazar.dao.RetailerDAO;
 import com.kisankrishibazar.model.CommodityListBean;
+import com.kisankrishibazar.model.NegotiationDetails;
 import com.kisankrishibazar.model.OrderHistory;
 import com.kisankrishibazar.model.User;
 import com.kisankrishibazar.model.UserWithItem;
@@ -67,6 +68,21 @@ public class RetailerDAOImpl implements RetailerDAO {
 		}
 	}
 
+	public Boolean saveNegotiationDetails(NegotiationDetails negotiationDetails) {
+
+		String query = "INSERT INTO Negotiation (OrderId, estimatedPrice , negotiationPrice , quotedPrice , FrmrUserName, RetailerUserName) VALUES (?,?,?,?,?,?)";
+		int[] types = new int[] { Types.INTEGER, Types.FLOAT, Types.FLOAT,
+				Types.FLOAT, Types.VARCHAR, Types.VARCHAR };
+		int row = jdbcTemplate
+				.update(query, new Object[] {negotiationDetails.getOrderId(),negotiationDetails.getEstimatedPrice(),
+						negotiationDetails.getNegotiationPrice(),negotiationDetails.getQuotedPrice(),negotiationDetails.getFrmrUserName(),negotiationDetails.getRetailerUserName()
+						}, types);
+		if (row > 0) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	@SuppressWarnings("unchecked")
 	public List<UserWithItem> getStock(String item, int quantity, float lat,
 			float longitude) {
