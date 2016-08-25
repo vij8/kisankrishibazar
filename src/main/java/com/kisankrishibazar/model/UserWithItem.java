@@ -5,6 +5,9 @@ import com.google.gson.annotations.Expose;
 public class UserWithItem {
 	@Expose
 	private String username;
+	
+	@Expose
+	private int orderAvailableId;
 
 	private float lat;
 
@@ -94,5 +97,13 @@ public class UserWithItem {
 	private float price;
 	 @Expose
 	private int quantity;
+
+	public int getOrderAvailableId() {
+		return orderAvailableId;
+	}
+
+	public void setOrderAvailableId(int orderAvailableId) {
+		this.orderAvailableId = orderAvailableId;
+	}
 
 }

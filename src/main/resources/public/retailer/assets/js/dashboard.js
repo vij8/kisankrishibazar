@@ -1,4 +1,29 @@
 $(document).ready(function() {
+	
+
+	function startWorker() {
+	    if(typeof(Worker) !== "undefined") {
+	        if(typeof(w) == "undefined") {
+	            w = new Worker("demo_workers.js");
+	        }
+	        w.onmessage = function(event) {
+	            document.getElementById("result").innerHTML = event.data;
+	        };
+	    } else {
+	        document.getElementById("result").innerHTML = "Sorry, your browser does not support Web Workers...";
+	    }
+	}
+
+	function stopWorker() {
+	    w.terminate();
+	    w = undefined;
+	}
+	
+	
+	
+	
+
+	
 	var response="";
 	var jsonResponse="";
 	$.ajax({
@@ -42,6 +67,7 @@ $(document).ready(function() {
 	       var response = $.parseJSON(details);
 	       var retailerusername = response.username;
 	       var frmrusername = $(this).closest('tr').find('.userDetailsPop .username').val();
+	       var orderAvailableID = $(this).closest('tr').find('.userDetailsPop .orderAvailableId').val();
 	       var qty = $(this).closest('tr').find('.quantity').text();
 	       var price = $(this).closest('tr').find('.frmrPrice').text();
 	       $.ajax({
@@ -52,6 +78,7 @@ $(document).ready(function() {
 					item : item,
 					qty : qty,
 					frmrusername : frmrusername,
+					orderId : orderAvailableID,
 					retailerusername : retailerusername,
 					price : price
 				},
@@ -100,12 +127,16 @@ $(document).ready(function() {
 	        		  userResultHtml+="<td>";
 	        		  userResultHtml+="   <button class='btn btn-xs btn-danger markInterested'>Mark Interested</button>";
 	        		  userResultHtml+=" </td>";
+	        		  userResultHtml+="<td>";
+	        		  userResultHtml+="   <button class='btn btn-xs btn-danger markInterested'>Negotiate</button>";
+	        		  userResultHtml+=" </td>";
 	        		  userResultHtml+="<td> <button class='btn btn-xs btn-danger viewDetails disabled'>View</button> </td>";
 	        		  userResultHtml+=" <td>"
 		              userResultHtml+=" <label class='label label-info distance' >"+jsonResponse[i].distance.toFixed(2)+" km</label></td>";
 	        		  userResultHtml+="<td class='hide userDetailsPop'>"
 	        		  userResultHtml+="<input type='hidden' class='address' value='" +jsonResponse[i].address+"'></input>";
 	        		  userResultHtml+="<input type='hidden' class='username' value='" +jsonResponse[i].username+"'></input>";
+	        		  userResultHtml+="<input type='hidden' class='orderAvailableId' value='" +jsonResponse[i].orderAvailableId+"'></input>";
 	        		  userResultHtml+="<input type='hidden' class='phoneno' value='"+jsonResponse[i].phone+"'></input></td></tr>";
 	        	  }
 	        	  $(".userDetails").html(userResultHtml);

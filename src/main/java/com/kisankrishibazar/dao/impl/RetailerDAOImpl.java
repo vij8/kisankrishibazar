@@ -50,14 +50,14 @@ public class RetailerDAOImpl implements RetailerDAO {
 		String selectQuery = "select id from Commodity where English = ? ";
 		int id = jdbcTemplate.queryForObject(selectQuery,
 				new Object[] { orderHistory.getItem() }, Integer.class);
-		String query = "INSERT INTO OrderSuccesfulHistory (FrmrUserName, RetailerUserName , Date , id , Price, Qty) VALUES (?,?,?,?,?,?)";
-		int[] types = new int[] { Types.VARCHAR, Types.VARCHAR, Types.DATE,
+		String query = "INSERT INTO OrderSuccesfulHistory (OrderAvalID,FrmrUserName, RetailerUserName , Date , id , Price, Qty) VALUES (?,?,?,?,?,?,?)";
+		int[] types = new int[] { Types.INTEGER,Types.VARCHAR, Types.VARCHAR, Types.DATE,
 				Types.INTEGER, Types.FLOAT, Types.INTEGER };
 		Calendar calendar = Calendar.getInstance();
 		java.sql.Date startDate = new java.sql.Date(calendar.getTime()
 				.getTime());
 		int row = jdbcTemplate
-				.update(query, new Object[] { orderHistory.getFrmrusername(),
+				.update(query, new Object[] { orderHistory.getOrderId(), orderHistory.getFrmrusername(),
 						orderHistory.getRetailerusername(), startDate, id,
 						orderHistory.getPrice(), orderHistory.getQty() }, types);
 		if (row > 0) {
@@ -72,7 +72,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 			float longitude) {
 		List<UserWithItem> returnUserWithItem = new ArrayList<UserWithItem>();
 		
-		String sql = "select l.lat,l.longt,l.name,l.Address,l.Phone, o.username,o.quotedPrice,o.Qty from Commodity c, OrderAvailable o, login l " +
+		String sql = "select l.lat,l.longt,l.name,l.Address,l.Phone,o.OrderAvailableId, o.username,o.quotedPrice,o.Qty from Commodity c, OrderAvailable o, login l " +
 		"where c.id=o.id and l.type='F' and l.username = o .userName  and  c.English = ?  " +
 		"and o.username not in (select os.FrmrUserName from OrderSuccesfulHistory os)";		
 		List<Map<String, Object>> rows = jdbcTemplate.queryForList(sql,
@@ -89,6 +89,7 @@ public class RetailerDAOImpl implements RetailerDAO {
 			userwithitem.setName((String) row.get("Name"));
 			userwithitem.setPhone((String) row.get("Phone"));
 			userwithitem.setUsername((String) row.get("UserName"));
+			userwithitem.setOrderAvailableId((int)row.get("OrderAvailableId"));
 			returnUserWithItem.add(userwithitem);
 		}
 

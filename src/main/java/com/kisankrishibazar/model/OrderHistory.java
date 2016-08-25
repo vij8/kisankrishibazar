@@ -24,6 +24,8 @@ public class OrderHistory
 	private String address;
 
 	private String phone;
+	
+	private int orderId;
 
 	public String getFrmrusername()
 	{
@@ -121,6 +123,14 @@ public class OrderHistory
 
 	public void setItem(String item) {
 		this.item = item;
+	}
+
+	public int getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(int orderId) {
+		this.orderId = orderId;
 	}
 
 }

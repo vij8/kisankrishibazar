@@ -115,6 +115,7 @@
                                     <th>Quantity Available(kg)</th>
                                     <th>Farmer Price</th>                                    
                                     <th>Mark Intrested</th>
+                                    <th>Negotiate</th>
                                     <th>View Details</th>
                                     <th>Distance</th>
                                 </tr>
